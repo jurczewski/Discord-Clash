@@ -1,0 +1,30 @@
+@startuml
+skinparam defaultFontName Muli
+
+!include <cloudinsight/rabbitmq>
+!include <material/common>
+!include <material/discord>
+!include <logos/discord.puml>
+
+title "**Discord Clash - Uproszczony diagram komponentów** \n"
+
+queue "<$rabbitmq>\nKolejka" as Rabbit
+
+database "MSSQL" as DB
+
+[API]
+
+[Discord Bot] as BOT 
+
+' MA_DISCORD(BlueViolet, 1, dir, rectangle, "Discord BOT") as BOT
+' rectangle "<$discord>\nDiscord BOT" as BOT
+
+() "Serwer Discord" as Channel
+
+API -right-> Rabbit : "  publikuje  "
+Rabbit -right-> BOT : ""
+Rabbit <.right. BOT : "  subskrybuje  "
+BOT -right-> Channel : "\t"
+API -down-> DB
+
+@enduml
