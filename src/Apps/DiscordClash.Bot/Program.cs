@@ -72,7 +72,7 @@ namespace DiscordClash.Bot
             .AddSingleton<StartupService>();
         }
 
-        private static void PrepareServiceProvider(ServiceProvider provider)
+        private static void PrepareServiceProvider(IServiceProvider provider)
         {
             provider.GetRequiredService<LoggingService>();
             provider.GetRequiredService<CommandHandler>();
