@@ -31,8 +31,8 @@ namespace DiscordClash.API
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             // todo: add rabbitmq healthcheck
-            services.AddHealthChecks()
-                //.AddRabbitMQ(rabbitConnectionString: "http://localhost");
+            services.AddHealthChecks();
+            //.AddRabbitMQ(rabbitConnectionString: "http://localhost");
 
             DisplayBanner();
         }
