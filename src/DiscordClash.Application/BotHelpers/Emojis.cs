@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace DiscordClash.Application.Helpers
+namespace DiscordClash.Application.BotHelpers
 {
     public static class Emojis
     {

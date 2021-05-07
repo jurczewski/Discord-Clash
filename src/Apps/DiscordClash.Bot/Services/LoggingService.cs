@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DiscordClash.Bot.Services
 {
-    public class LoggingService
+    public class LoggingService //todo: rename all 'services' to handlers
     {
         private readonly ILogger<LoggingService> _logger;
 

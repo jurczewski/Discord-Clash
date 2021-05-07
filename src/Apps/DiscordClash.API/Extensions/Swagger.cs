@@ -10,7 +10,7 @@ namespace DiscordClash.API.Extensions
 {
     public static class Swagger
     {
-        public static void AddConfiguredSwagger(this IServiceCollection services)
+        public static IServiceCollection AddConfiguredSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -28,6 +28,8 @@ namespace DiscordClash.API.Extensions
                     });
                 c.CheckIfExistsAndIncludeXmlComments();
             });
+
+            return services;
         }
 
         public static void UseCustomSwagger(this IApplicationBuilder app)

@@ -16,6 +16,8 @@ namespace DiscordClash.Core.Domain
         public DateTime CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
 
+        public Event() { }
+
         public Event(Guid id, string fullName, DateTime starTime, DateTime endTime, string country, string city, bool isFree, Game gameCode)
         {
             Id = id;

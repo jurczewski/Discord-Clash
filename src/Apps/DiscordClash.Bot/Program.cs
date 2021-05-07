@@ -1,8 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using DiscordClash.Application.Services;
-using DiscordClash.Application.Services.Interfaces;
+using DiscordClash.Application.UseCases;
 using DiscordClash.Bot.Infrastructure;
 using DiscordClash.Bot.Services;
 using EasyNetQ;
@@ -75,7 +74,7 @@ namespace DiscordClash.Bot
             .AddSingleton<StartupService>()
             .AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]))
             .AddSingleton<MessageService>()
-            .AddTransient<INotificationService, NotificationService>();
+            .AddTransient<NotifyAboutNewEventUseCase>();
         }
 
         private static void DisplayBanner()

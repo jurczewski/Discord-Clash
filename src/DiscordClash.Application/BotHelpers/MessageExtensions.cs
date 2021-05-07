@@ -1,7 +1,7 @@
 ﻿using Discord;
-using DiscordClash.Application.Commands;
+using DiscordClash.Application.Messages;
 
-namespace DiscordClash.Application.Helpers
+namespace DiscordClash.Application.BotHelpers
 {
     public static class MessageExtensions
     {
@@ -10,7 +10,7 @@ namespace DiscordClash.Application.Helpers
             return $"**{text}**";
         }
 
-        public static void AddEventToBuilder(this EmbedBuilder builder, CreateNewEvent cmd)
+        public static void AddEventToBuilder(this EmbedBuilder builder, NewEvent cmd)
         {
             builder.AddField(f =>
             {

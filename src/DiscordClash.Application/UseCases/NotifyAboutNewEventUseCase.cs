@@ -1,30 +1,29 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using DiscordClash.Application.Commands;
-using DiscordClash.Application.Helpers;
-using DiscordClash.Application.Services.Interfaces;
+using DiscordClash.Application.BotHelpers;
+using DiscordClash.Application.Messages;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DiscordClash.Application.Services
+namespace DiscordClash.Application.UseCases
 {
-    public class NotificationService : INotificationService // todo: use Mediator
+    public class NotifyAboutNewEventUseCase
     {
         private readonly DiscordSocketClient _client;
-        private readonly ILogger<NotificationService> _logger;
+        private readonly ILogger<NotifyAboutNewEventUseCase> _logger;
 
         private const ulong EventsChannelId = 831225771967119362u; //todo: move to appsettings
 
-        public NotificationService(DiscordSocketClient client, ILogger<NotificationService> logger)
+        public NotifyAboutNewEventUseCase(DiscordSocketClient client, ILogger<NotifyAboutNewEventUseCase> logger)
         {
             _client = client;
             _logger = logger;
         }
 
-        public async Task NotifyAboutNewEvent(CreateNewEvent cmd)
+        public async Task Execute(NewEvent cmd)
         {
             var builder = new EmbedBuilder
             {
@@ -48,7 +47,7 @@ namespace DiscordClash.Application.Services
             var sent = await ((IMessageChannel)channel).SendMessageAsync(string.Empty, false, builder.Build());
 
             await sent.AddReactionsAsync(emojiCodes.ToArray());
-            _logger.LogInformation("New event with {@Id} and name: {@name} was posted to Discord channel. {@cmd}", cmd.Id, cmd.FullName, cmd);
+            _logger.LogInformation("New event with name: {@name} was posted to Discord channel. {@cmd}", cmd.FullName, cmd);
         }
 
         private static async Task FakeTyping(SocketChannel channel)
