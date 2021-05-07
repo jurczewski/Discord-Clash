@@ -1,15 +1,18 @@
 using DiscordClash.API.Extensions;
+using EasyNetQ;
+using Figgle;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Reflection;
 
 namespace DiscordClash.API
 {
     public class Startup
     {
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -21,9 +24,17 @@ namespace DiscordClash.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddConfiguredSwagger();
+            services.AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]));
+            services.AddConfiguredSwagger()
+                .AddServices()
+                .AddInfrastructure();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            // todo: add rabbitmq healthcheck
             services.AddHealthChecks();
-            services.AddServices();
+            //.AddRabbitMQ(rabbitConnectionString: "http://localhost");
+
+            DisplayBanner();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +60,12 @@ namespace DiscordClash.API
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCustomEndpoints();
+        }
+
+        private static void DisplayBanner()
+        {
+            var name = Assembly.GetCallingAssembly().GetName().Name;
+            Console.WriteLine(FiggleFonts.Doom.Render(name!));
         }
     }
 }

@@ -1,0 +1,17 @@
+@url = https://localhost:5001
+@eventId = {{new_event.response.headers.location}}
+
+### Create new event
+POST {{url}}/events/
+# @name new_event
+Content-Type: application/json
+
+{
+    "fullName": "Discord Cup",
+    "starTime": "2021-05-01T10:00:00.00",
+    "endTime": "2021-05-03T10:00:00.00",
+    "country": "Poland",
+    "city": "Lodz",
+    "isFree": true,
+    "gameCode": 0
+}

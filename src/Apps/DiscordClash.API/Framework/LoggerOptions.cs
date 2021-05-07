@@ -3,7 +3,7 @@ using DiscordClash.API.Framework.Options;
 
 namespace DiscordClash.API.Framework
 {
-    public class LoggerOptions
+    public class LoggerOptions // todo: fix color
     {
         public string MinimumLevel { get; set; } = "Information";
         public ConsoleOptions Console { get; set; }

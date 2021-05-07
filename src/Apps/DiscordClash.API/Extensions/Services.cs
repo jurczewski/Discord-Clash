@@ -1,23 +1,24 @@
-﻿using Figgle;
+﻿using DiscordClash.Application.UseCases;
+using DiscordClash.Core.Repositories;
+using DiscordClash.Infrastructure.Repositories.InMemory;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Reflection;
 
 namespace DiscordClash.API.Extensions
 {
     public static class Services
     {
-        public static void AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            //services.AddTransient<IEventService, EventService>();
+            services.AddTransient<CreateNewEventUseCase>();
 
-            DisplayBanner();
+            return services;
         }
 
-        private static void DisplayBanner()
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            var name = Assembly.GetCallingAssembly().GetName().Name;
-            Console.WriteLine(FiggleFonts.Doom.Render(name!));
+            services.AddTransient<IEventRepository, InMemoryEventRepository>();
+
+            return services;
         }
     }
 }
