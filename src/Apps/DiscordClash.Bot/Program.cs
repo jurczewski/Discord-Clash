@@ -1,8 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordClash.Application.Services;
+using DiscordClash.Application.Services.Interfaces;
 using DiscordClash.Bot.Infrastructure;
 using DiscordClash.Bot.Services;
+using EasyNetQ;
 using Figgle;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,45 +20,45 @@ namespace DiscordClash.Bot
 {
     public class Program
     {
+        private static IConfigurationRoot Configuration { get; set; }
         private static string ApplicationName => Assembly.GetCallingAssembly().GetName().Name;
 
         public static async Task Main()
         {
             DisplayBanner();
-
-            var builder = new ConfigurationBuilder();
-            BuildConfig(builder);
-
-            Logging.SetupSerilog(ApplicationName);
+            BuildConfig();
 
             Host.CreateDefaultBuilder()
-                .UseSerilog()
-                .ConfigureServices(async (ctx, services) =>
+                .UseSerilog(Logging.SetupSerilog(ApplicationName))
+                .ConfigureServices(async (_, services) =>
                 {
-                    var configuration = ctx.Configuration;
-                    services.Configure<BotSettings>(configuration.GetSection("BotSettings"));
-
                     ConfigureServices(services);
 
                     var provider = services.BuildServiceProvider();
-                    PrepareServiceProvider(provider);
-
+                    provider.GetRequiredService<LoggingService>();
+                    provider.GetRequiredService<CommandHandler>();
                     await provider.GetRequiredService<StartupService>().StartAsync();
+
+                    var msgService = provider.GetService<MessageService>();
+                    msgService?.ProcessMessages();
                 })
                 .Build();
 
-            // Delay indefinitely.
             await Task.Delay(Timeout.Infinite);
         }
 
-        private static void BuildConfig(IConfigurationBuilder builder)
+        private static void BuildConfig()
         {
+            var builder = new ConfigurationBuilder();
             builder.AddJsonFile("appsettings.json", true, true)
                 .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<BotSettings>(Configuration.GetSection("BotSettings"));
+
             services.AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose,
@@ -69,13 +72,10 @@ namespace DiscordClash.Bot
             }))
             .AddSingleton<LoggingService>()
             .AddSingleton<CommandHandler>()
-            .AddSingleton<StartupService>();
-        }
-
-        private static void PrepareServiceProvider(IServiceProvider provider)
-        {
-            provider.GetRequiredService<LoggingService>();
-            provider.GetRequiredService<CommandHandler>();
+            .AddSingleton<StartupService>()
+            .AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]))
+            .AddSingleton<MessageService>()
+            .AddTransient<INotificationService, NotificationService>();
         }
 
         private static void DisplayBanner()

@@ -18,7 +18,13 @@ namespace DiscordClash.API.Extensions
                     new OpenApiInfo
                     {
                         Title = "DiscordClash.API",
-                        Description = "",
+                        Description = "", // todo: add description + github readme
+
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Bartosz Jurczewski",
+                            Url = new Uri("https://github.com/jurczewski/"),
+                        }
                     });
                 c.CheckIfExistsAndIncludeXmlComments();
             });
@@ -27,7 +33,7 @@ namespace DiscordClash.API.Extensions
         public static void UseCustomSwagger(this IApplicationBuilder app)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(o => o.SwaggerEndpoint("/swagger/v1/swagger.json", "Discord Clash"));
+            app.UseSwaggerUI(o => o.SwaggerEndpoint("/swagger/v1/swagger.json", Assembly.GetEntryAssembly()?.GetName().Name));
         }
 
         private static void CheckIfExistsAndIncludeXmlComments(this SwaggerGenOptions c)

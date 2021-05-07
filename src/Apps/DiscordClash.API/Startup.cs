@@ -1,4 +1,5 @@
 using DiscordClash.API.Extensions;
+using EasyNetQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +10,6 @@ namespace DiscordClash.API
 {
     public class Startup
     {
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -24,6 +24,12 @@ namespace DiscordClash.API
             services.AddConfiguredSwagger();
             services.AddHealthChecks();
             services.AddServices();
+
+            services.AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]));
+
+            // todo: add rabbitmq healthcheck
+            //services.AddHealthChecks()
+            //    .AddRabbitMQ(rabbitConnectionString: rabbitMq);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,9 +7,9 @@ namespace DiscordClash.Bot.Infrastructure
 {
     public static class Logging
     {
-        public static void SetupSerilog(string applicationName = null)
+        public static ILogger SetupSerilog(string applicationName = null)
         {
-            Log.Logger = new LoggerConfiguration()
+            return new LoggerConfiguration()
                 .MinimumLevel.Is(LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("ApplicationName", applicationName)

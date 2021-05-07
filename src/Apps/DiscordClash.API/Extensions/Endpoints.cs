@@ -14,7 +14,7 @@ namespace DiscordClash.API.Extensions
         {
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers(); // todo: add graphic ui
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = _ => true,
