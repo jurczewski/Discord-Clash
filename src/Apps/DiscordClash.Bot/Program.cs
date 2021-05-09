@@ -9,7 +9,6 @@ using Figgle;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 using System;
 using System.Reflection;
 using System.Threading;
@@ -20,15 +19,19 @@ namespace DiscordClash.Bot
     public class Program
     {
         private static IConfigurationRoot Configuration { get; set; }
-        private static string ApplicationName => Assembly.GetCallingAssembly().GetName().Name;
 
         public static async Task Main()
         {
             DisplayBanner();
-            BuildConfig();
 
             Host.CreateDefaultBuilder()
-                .UseSerilog(Logging.SetupSerilog(ApplicationName))
+                .UseCustomLogging()
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.AddJsonFile("appsettings.json", true, true)
+                        .AddEnvironmentVariables();
+                    Configuration = builder.Build();
+                })
                 .ConfigureServices(async (_, services) =>
                 {
                     ConfigureServices(services);
@@ -36,6 +39,7 @@ namespace DiscordClash.Bot
                     var provider = services.BuildServiceProvider();
                     provider.GetRequiredService<LoggingService>();
                     provider.GetRequiredService<CommandHandler>();
+
                     await provider.GetRequiredService<StartupService>().StartAsync();
 
                     var msgService = provider.GetService<MessageService>();
@@ -44,14 +48,6 @@ namespace DiscordClash.Bot
                 .Build();
 
             await Task.Delay(Timeout.Infinite);
-        }
-
-        private static void BuildConfig()
-        {
-            var builder = new ConfigurationBuilder();
-            builder.AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -79,7 +75,8 @@ namespace DiscordClash.Bot
 
         private static void DisplayBanner()
         {
-            Console.WriteLine(FiggleFonts.Doom.Render(ApplicationName));
+            var name = Assembly.GetCallingAssembly().GetName().Name;
+            Console.WriteLine(FiggleFonts.Doom.Render(name!));
         }
     }
 }

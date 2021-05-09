@@ -1,10 +1,11 @@
-﻿using DiscordClash.Application.Commands;
+﻿using AutoMapper;
+using DiscordClash.Application.Commands;
 using DiscordClash.Application.Messages;
-using EasyNetQ;
-using System.Threading.Tasks;
-using AutoMapper;
 using DiscordClash.Core.Domain;
 using DiscordClash.Core.Repositories;
+using EasyNetQ;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace DiscordClash.Application.UseCases
 {
@@ -13,21 +14,25 @@ namespace DiscordClash.Application.UseCases
         private readonly IBus _bus;
         private readonly IMapper _mapper;
         private readonly IEventRepository _eventRepository;
+        private readonly ILogger<CreateNewEventUseCase> _logger;
 
-        public CreateNewEventUseCase(IBus bus, IMapper mapper, IEventRepository eventRepository)
+        public CreateNewEventUseCase(IBus bus, IMapper mapper, IEventRepository eventRepository, ILogger<CreateNewEventUseCase> logger)
         {
             _bus = bus;
             _mapper = mapper;
             _eventRepository = eventRepository;
+            _logger = logger;
         }
 
         public async Task Execute(CreateNewEvent cmd)
         {
             var msg = _mapper.Map<NewEvent>(cmd);
             await _bus.SendReceive.SendAsync(Queues.Events, msg);
+            _logger.LogInformation("CreateNewEvent message was send - {@msg}", msg);
 
             var @event = _mapper.Map<Event>(cmd);
             await _eventRepository.Add(@event);
+            _logger.LogInformation("New event was added - {@event}", @event);
         }
     }
 }
