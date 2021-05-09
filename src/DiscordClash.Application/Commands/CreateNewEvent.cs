@@ -2,7 +2,7 @@
 
 namespace DiscordClash.Application.Commands
 {
-    public record CreateNewEvent //todo: move to useCase and use Mediator
+    public record CreateNewEvent : ICommand
     {
         public Guid Id { get; set; }
         public string FullName { get; set; }

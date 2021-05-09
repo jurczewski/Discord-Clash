@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
 using DiscordClash.Application.Messages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -14,13 +15,13 @@ namespace DiscordClash.Application.UseCases
     {
         private readonly DiscordSocketClient _client;
         private readonly ILogger<NotifyAboutNewEventUseCase> _logger;
+        private readonly ulong _eventsChannelId;
 
-        private const ulong EventsChannelId = 831225771967119362u; //todo: move to appsettings
-
-        public NotifyAboutNewEventUseCase(DiscordSocketClient client, ILogger<NotifyAboutNewEventUseCase> logger)
+        public NotifyAboutNewEventUseCase(DiscordSocketClient client, ILogger<NotifyAboutNewEventUseCase> logger, IOptions<BotSettings> settings)
         {
             _client = client;
             _logger = logger;
+            _eventsChannelId = settings.Value.EventsChannelId;
         }
 
         public async Task Execute(NewEvent cmd)
@@ -42,7 +43,7 @@ namespace DiscordClash.Application.UseCases
             };
 
             // Create the poll in the event channel.
-            var channel = _client.GetChannel(EventsChannelId);
+            var channel = _client.GetChannel(_eventsChannelId);
             await FakeTyping(channel);
             var sent = await ((IMessageChannel)channel).SendMessageAsync(string.Empty, false, builder.Build());
 

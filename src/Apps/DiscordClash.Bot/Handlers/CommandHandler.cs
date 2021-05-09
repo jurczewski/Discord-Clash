@@ -1,11 +1,12 @@
-﻿using Discord.Commands;
-using Discord.WebSocket;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Discord.Commands;
+using Discord.WebSocket;
+using DiscordClash.Application.BotHelpers;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace DiscordClash.Bot.Services
+namespace DiscordClash.Bot.Handlers
 {
     public class CommandHandler
     {

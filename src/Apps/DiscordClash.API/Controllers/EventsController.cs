@@ -20,8 +20,8 @@ namespace DiscordClash.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNewEvent([FromServices] CreateNewEventUseCase apiUseCase, CreateNewEvent cmd)
         {
-            // todo: handle guid
             var guid = Guid.NewGuid();
+            cmd.Id = guid;
             await apiUseCase.Execute(cmd);
 
             return new CreatedResult($"{guid}", null);

@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
-namespace DiscordClash.Bot.Services
+namespace DiscordClash.Bot.Handlers
 {
-    public class LoggingService //todo: rename all 'services' to handlers
+    public class LoggingHandler
     {
-        private readonly ILogger<LoggingService> _logger;
+        private readonly ILogger<LoggingHandler> _logger;
 
-        public LoggingService(ILogger<LoggingService> logger, DiscordSocketClient discord, CommandService commands)
+        public LoggingHandler(ILogger<LoggingHandler> logger, DiscordSocketClient discord, CommandService commands)
         {
             _logger = logger;
 

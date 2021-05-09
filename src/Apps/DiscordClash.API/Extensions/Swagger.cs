@@ -18,8 +18,7 @@ namespace DiscordClash.API.Extensions
                     new OpenApiInfo
                     {
                         Title = "DiscordClash.API",
-                        Description = "", // todo: add description + github readme
-
+                        Description = "",
                         Contact = new OpenApiContact
                         {
                             Name = "Bartosz Jurczewski",

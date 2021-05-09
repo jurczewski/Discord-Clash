@@ -1,4 +1,4 @@
-﻿namespace DiscordClash.Bot
+﻿namespace DiscordClash.Application.BotHelpers
 {
     public class BotSettings
     {
@@ -11,5 +11,10 @@
         /// The Discord bot token.
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// Discord Channel Id for event related notifications.
+        /// </summary>
+        public ulong EventsChannelId { get; set; }
     }
 }

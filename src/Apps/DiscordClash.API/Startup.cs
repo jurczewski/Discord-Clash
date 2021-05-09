@@ -27,12 +27,9 @@ namespace DiscordClash.API
             services.AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]));
             services.AddConfiguredSwagger()
                 .AddServices()
-                .AddInfrastructure();
-
+                .AddInfrastructure()
+                .AddCustomHealthChecks(Configuration);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            // todo: add rabbitmq healthcheck
-            services.AddHealthChecks();
-            //.AddRabbitMQ(rabbitConnectionString: "http://localhost");
 
             DisplayBanner();
         }
