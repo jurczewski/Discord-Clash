@@ -2,19 +2,37 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DiscordClash.API.Extensions
 {
-    public static class Endpoints
+    public static class HealthChecks
     {
+        private static string ApplicationName => Assembly.GetEntryAssembly()?.GetName().Name;
+
+        public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHealthChecks()
+                .AddRabbitMQ(rabbitConnectionString: configuration["rabbitMq:connectionString"]);
+            services.AddHealthChecksUI(opt =>
+                {
+                    opt.AddHealthCheckEndpoint(ApplicationName, "/health");
+                })
+                .AddInMemoryStorage();
+
+            return services;
+        }
+
+
         public static void UseCustomEndpoints(this IApplicationBuilder app)
         {
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers(); // todo: add graphic ui
+                endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = _ => true,
@@ -25,7 +43,8 @@ namespace DiscordClash.API.Extensions
                     Predicate = r => r.Name.Contains("self"),
                     ResponseWriter = PongWriteResponse,
                 });
-                endpoints.MapGet("/", context => context.Response.WriteAsync(Assembly.GetEntryAssembly()?.GetName().Name ?? "API"));
+                endpoints.MapHealthChecksUI();
+                endpoints.MapGet("/", context => context.Response.WriteAsync(ApplicationName ?? "API"));
             });
         }
 
