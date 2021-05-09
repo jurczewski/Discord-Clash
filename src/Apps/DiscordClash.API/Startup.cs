@@ -24,15 +24,14 @@ namespace DiscordClash.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddSingleton(RabbitHutch.CreateBus($"amqp://{Configuration["rabbitMq:connectionString"]}"));
             services.AddConfiguredSwagger()
                 .AddServices()
                 .AddInfrastructure();
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            // todo: add rabbitmq healthcheck
-            services.AddHealthChecks();
-            //.AddRabbitMQ(rabbitConnectionString: "http://localhost");
+            services.AddHealthChecks()
+                .AddRabbitMQ(rabbitConnectionString: $"amqp://{Configuration["rabbitMq:connectionString"]}");
 
             DisplayBanner();
         }
