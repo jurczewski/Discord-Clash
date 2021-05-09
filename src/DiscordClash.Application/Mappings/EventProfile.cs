@@ -4,11 +4,11 @@ using DiscordClash.Application.Commands;
 using DiscordClash.Application.Messages;
 using DiscordClash.Core.Domain;
 
-namespace DiscordClash.Application
+namespace DiscordClash.Application.Mappings
 {
-    public class AutoMapperProfile : Profile
+    public class EventProfile : Profile
     {
-        public AutoMapperProfile()
+        public EventProfile()
         {
             CreateMap<CreateNewEvent, NewEvent>().ReverseMap();
             CreateMap<CreateNewEvent, Event>().ReverseMap();
