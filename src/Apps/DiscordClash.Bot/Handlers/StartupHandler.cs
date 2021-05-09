@@ -1,22 +1,22 @@
-﻿using Discord;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
 using Microsoft.Extensions.Options;
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
 
-namespace DiscordClash.Bot.Services
+namespace DiscordClash.Bot.Handlers
 {
-    public class StartupService
+    public class StartupHandler
     {
         private readonly IServiceProvider _provider;
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly BotSettings _settings;
 
-        public StartupService(IServiceProvider provider, DiscordSocketClient discord, CommandService commands, IOptions<BotSettings> settings)
+        public StartupHandler(IServiceProvider provider, DiscordSocketClient discord, CommandService commands, IOptions<BotSettings> settings)
         {
             _provider = provider;
             _discord = discord;

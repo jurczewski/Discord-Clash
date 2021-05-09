@@ -3,8 +3,8 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
 using DiscordClash.Application.UseCases;
+using DiscordClash.Bot.Handlers;
 using DiscordClash.Bot.Infrastructure;
-using DiscordClash.Bot.Services;
 using EasyNetQ;
 using Figgle;
 using Microsoft.Extensions.Configuration;
@@ -38,12 +38,12 @@ namespace DiscordClash.Bot
                     ConfigureServices(services);
 
                     var provider = services.BuildServiceProvider();
-                    provider.GetRequiredService<LoggingService>();
+                    provider.GetRequiredService<LoggingHandler>();
                     provider.GetRequiredService<CommandHandler>();
 
-                    await provider.GetRequiredService<StartupService>().StartAsync();
+                    await provider.GetRequiredService<StartupHandler>().StartAsync();
 
-                    var msgService = provider.GetService<MessageService>();
+                    var msgService = provider.GetService<MessageHandler>();
                     msgService?.ProcessMessages();
                 })
                 .Build();
@@ -66,11 +66,11 @@ namespace DiscordClash.Bot
                 LogLevel = LogSeverity.Verbose,
                 DefaultRunMode = RunMode.Async,
             }))
-            .AddSingleton<LoggingService>()
+            .AddSingleton<LoggingHandler>()
             .AddSingleton<CommandHandler>()
-            .AddSingleton<StartupService>()
+            .AddSingleton<StartupHandler>()
             .AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]))
-            .AddSingleton<MessageService>()
+            .AddSingleton<MessageHandler>()
             .AddTransient<NotifyAboutNewEventUseCase>();
         }
 

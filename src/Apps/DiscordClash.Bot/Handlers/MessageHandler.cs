@@ -1,18 +1,18 @@
-﻿using DiscordClash.Application.Messages;
+﻿using System.Threading.Tasks;
+using DiscordClash.Application.Messages;
 using DiscordClash.Application.UseCases;
 using EasyNetQ;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
-namespace DiscordClash.Bot.Services
+namespace DiscordClash.Bot.Handlers
 {
-    public class MessageService
+    public class MessageHandler
     {
         private readonly IBus _bus;
         private readonly NotifyAboutNewEventUseCase _newEventUseCase; //todo: make sure it is okay
-        private readonly ILogger<MessageService> _logger;
+        private readonly ILogger<MessageHandler> _logger;
 
-        public MessageService(IBus bus, NotifyAboutNewEventUseCase newEventUseCase, ILogger<MessageService> logger)
+        public MessageHandler(IBus bus, NotifyAboutNewEventUseCase newEventUseCase, ILogger<MessageHandler> logger)
         {
             _bus = bus;
             _newEventUseCase = newEventUseCase;
