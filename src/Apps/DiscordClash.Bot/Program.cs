@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordClash.Application.BotHelpers;
 using DiscordClash.Application.UseCases;
 using DiscordClash.Bot.Infrastructure;
 using DiscordClash.Bot.Services;

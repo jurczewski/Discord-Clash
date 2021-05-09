@@ -1,9 +1,10 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using DiscordClash.Application.BotHelpers;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace DiscordClash.Bot.Services
 {

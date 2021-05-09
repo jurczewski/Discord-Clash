@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using DiscordClash.Application.BotHelpers;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
