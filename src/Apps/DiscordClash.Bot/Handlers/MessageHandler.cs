@@ -9,13 +9,13 @@ namespace DiscordClash.Bot.Handlers
     public class MessageHandler
     {
         private readonly IBus _bus;
-        private readonly NotifyAboutNewEventUseCase _newEventUseCase; //todo: make sure it is okay
+        private readonly NotifyAboutNewEventUseCase _notifyAboutNewEventUseCase;
         private readonly ILogger<MessageHandler> _logger;
 
-        public MessageHandler(IBus bus, NotifyAboutNewEventUseCase newEventUseCase, ILogger<MessageHandler> logger)
+        public MessageHandler(IBus bus, NotifyAboutNewEventUseCase notifyAboutNewEventUseCase, ILogger<MessageHandler> logger)
         {
             _bus = bus;
-            _newEventUseCase = newEventUseCase;
+            _notifyAboutNewEventUseCase = notifyAboutNewEventUseCase;
             _logger = logger;
         }
 
@@ -27,7 +27,7 @@ namespace DiscordClash.Bot.Handlers
         private async Task HandleMessage(NewEvent msg)
         {
             _logger.LogInformation("Received message with new event. {msg}", msg);
-            await _newEventUseCase.Execute(msg);
+            await _notifyAboutNewEventUseCase.Execute(msg);
         }
     }
 }
