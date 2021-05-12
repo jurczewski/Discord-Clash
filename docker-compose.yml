@@ -1,0 +1,51 @@
+# Rabbit URL: http://localhost:15672/
+# username: guest, password: guest
+
+version: "3.5"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - discordclash
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Apps/DiscordClash.API/Dockerfile
+    container_name: discord-clash.api
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - rabbitMq__connectionString=amqp://guest:guest@rabbitmq
+    depends_on:
+      - rabbitmq
+    ports:
+      - 5000:80
+    networks:
+      - discordclash
+
+  bot:
+    build:
+      context: .
+      dockerfile: src/Apps/DiscordClash.Bot/Dockerfile
+    container_name: discord-clash.bot
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - rabbitMq__connectionString=amqp://guest:guest@rabbitmq
+    depends_on:
+      - rabbitmq
+    ports:
+      - 5005:80
+    networks:
+      - discordclash
+
+networks:
+  discordclash:
+    name: discordclash-network
+    external: true

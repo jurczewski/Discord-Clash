@@ -1,18 +1,17 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/runtime:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
+EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["src/Apps/DiscordClash.Bot/DiscordClash.Bot.csproj", "src/Apps/DiscordClash.Bot/"]
-RUN dotnet restore "src/Apps/DiscordClash.Bot/DiscordClash.Bot.csproj"
 COPY . .
-WORKDIR "/src/src/Apps/DiscordClash.Bot"
-RUN dotnet build "DiscordClash.Bot.csproj" -c Release -o /app/build
+
+WORKDIR /src/src/Apps/DiscordClash.Bot
+RUN dotnet restore 
+RUN dotnet build -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish "DiscordClash.Bot.csproj" -c Release -o /app/publish
+RUN dotnet publish --no-restore -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
