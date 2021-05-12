@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Reflection;
+using DiscordClash.Application.Handlers;
+using MediatR;
 
 namespace DiscordClash.API
 {
@@ -29,7 +31,8 @@ namespace DiscordClash.API
                 .AddServices()
                 .AddInfrastructure()
                 .AddCustomHealthChecks(Configuration);
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddMediatR(typeof(CreateNewEventHandler));
 
             DisplayBanner();
         }

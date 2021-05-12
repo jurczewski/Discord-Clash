@@ -1,22 +1,25 @@
 ﻿using AutoMapper;
-using DiscordClash.Application.Commands;
 using DiscordClash.Application.Messages;
+using DiscordClash.Application.Requests;
 using DiscordClash.Core.Domain;
 using DiscordClash.Core.Repositories;
 using EasyNetQ;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace DiscordClash.Application.UseCases
+namespace DiscordClash.Application.Handlers
 {
-    public class CreateNewEventUseCase
+    public class CreateNewEventHandler : IRequestHandler<CreateNewEvent, Guid>
     {
         private readonly IBus _bus;
         private readonly IMapper _mapper;
         private readonly IEventRepository _eventRepository;
-        private readonly ILogger<CreateNewEventUseCase> _logger;
+        private readonly ILogger<CreateNewEventHandler> _logger;
 
-        public CreateNewEventUseCase(IBus bus, IMapper mapper, IEventRepository eventRepository, ILogger<CreateNewEventUseCase> logger)
+        public CreateNewEventHandler(IBus bus, IMapper mapper, IEventRepository eventRepository, ILogger<CreateNewEventHandler> logger)
         {
             _bus = bus;
             _mapper = mapper;
@@ -24,15 +27,20 @@ namespace DiscordClash.Application.UseCases
             _logger = logger;
         }
 
-        public async Task Execute(CreateNewEvent cmd)
+        public async Task<Guid> Handle(CreateNewEvent cmd, CancellationToken cancellationToken)
         {
+            var id = Guid.NewGuid();
+            cmd.Id = id;
+
             var msg = _mapper.Map<NewEvent>(cmd);
-            await _bus.SendReceive.SendAsync(Queues.Events, msg);
+            await _bus.SendReceive.SendAsync(Queues.Events, msg, cancellationToken);
             _logger.LogInformation("CreateNewEvent message was send - {@msg}", msg);
 
             var @event = _mapper.Map<Event>(cmd);
             await _eventRepository.Add(@event);
             _logger.LogInformation("New event was added - {@event}", @event);
+
+            return id;
         }
     }
 }

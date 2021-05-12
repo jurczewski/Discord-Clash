@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
-using DiscordClash.Application.Commands;
 using DiscordClash.Application.Messages;
+using DiscordClash.Application.Requests;
 using DiscordClash.Core.Domain;
+using Game = DiscordClash.Application.Requests.Game;
 
 namespace DiscordClash.Application.Mappings
 {
@@ -10,11 +11,12 @@ namespace DiscordClash.Application.Mappings
     {
         public EventProfile()
         {
-            CreateMap<CreateNewEvent, NewEvent>().ReverseMap();
-            CreateMap<CreateNewEvent, Event>().ReverseMap();
+            CreateMap<CreateNewEvent, NewEvent>();
+            CreateMap<CreateNewEvent, Event>();
+            CreateMap<NewEvent, NotifyAboutEvent>();
 
-            CreateMap<Commands.Game, Messages.Game>().ConvertUsingEnumMapping();
-            CreateMap<Commands.Game, Core.Domain.Game>().ConvertUsingEnumMapping();
+            CreateMap<Game, Messages.Game>().ConvertUsingEnumMapping();
+            CreateMap<Game, Core.Domain.Game>().ConvertUsingEnumMapping();
         }
     }
 }

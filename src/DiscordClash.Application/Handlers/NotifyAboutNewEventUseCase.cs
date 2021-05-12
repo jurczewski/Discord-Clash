@@ -1,7 +1,8 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
-using DiscordClash.Application.Messages;
+using DiscordClash.Application.Requests;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -9,9 +10,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DiscordClash.Application.UseCases
+namespace DiscordClash.Application.Handlers
 {
-    public class NotifyAboutNewEventUseCase
+    public class NotifyAboutNewEventUseCase : IRequestHandler<NotifyAboutEvent, Unit>
     {
         private readonly DiscordSocketClient _client;
         private readonly ILogger<NotifyAboutNewEventUseCase> _logger;
@@ -24,7 +25,7 @@ namespace DiscordClash.Application.UseCases
             _eventsChannelId = settings.Value.EventsChannelId;
         }
 
-        public async Task Execute(NewEvent cmd)
+        public async Task<Unit> Handle(NotifyAboutEvent request, CancellationToken cancellationToken)
         {
             var builder = new EmbedBuilder
             {
@@ -34,7 +35,7 @@ namespace DiscordClash.Application.UseCases
                               + "React with a emote to sing up"
             };
 
-            builder.AddEventToBuilder(cmd);
+            builder.AddEventToBuilder(request);
 
             var emojiCodes = new List<IEmote>
             {
@@ -48,7 +49,9 @@ namespace DiscordClash.Application.UseCases
             var sent = await ((IMessageChannel)channel).SendMessageAsync(string.Empty, false, builder.Build());
 
             await sent.AddReactionsAsync(emojiCodes.ToArray());
-            _logger.LogInformation("New event with name: {@name} was posted to Discord channel. {@cmd}", cmd.FullName, cmd);
+            _logger.LogInformation("New event with name: {@name} was posted to Discord channel. {@cmd}", request.FullName, request);
+
+            return Unit.Value;
         }
 
         private static async Task FakeTyping(SocketChannel channel)

@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
-using DiscordClash.Application.UseCases;
 using DiscordClash.Bot.Handlers;
 using DiscordClash.Bot.Infrastructure;
 using EasyNetQ;
@@ -14,6 +13,8 @@ using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using DiscordClash.Application.Handlers;
+using MediatR;
 
 namespace DiscordClash.Bot
 {
@@ -55,6 +56,8 @@ namespace DiscordClash.Bot
         {
             services.Configure<BotSettings>(Configuration.GetSection("BotSettings"));
 
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             services.AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose,
@@ -70,8 +73,9 @@ namespace DiscordClash.Bot
             .AddSingleton<CommandHandler>()
             .AddSingleton<StartupHandler>()
             .AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]))
-            .AddSingleton<MessageHandler>()
-            .AddTransient<NotifyAboutNewEventUseCase>();
+            .AddSingleton<MessageHandler>();
+
+            services.AddMediatR(typeof(NotifyAboutNewEventUseCase));
         }
 
         private static void DisplayBanner()

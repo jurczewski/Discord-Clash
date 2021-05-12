@@ -1,5 +1,5 @@
 ﻿using Discord;
-using DiscordClash.Application.Messages;
+using DiscordClash.Application.Requests;
 
 namespace DiscordClash.Application.BotHelpers
 {
@@ -10,7 +10,7 @@ namespace DiscordClash.Application.BotHelpers
             return $"**{text}**";
         }
 
-        public static void AddEventToBuilder(this EmbedBuilder builder, NewEvent cmd)
+        public static void AddEventToBuilder(this EmbedBuilder builder, NotifyAboutEvent cmd)
         {
             builder.AddField(f =>
             {
