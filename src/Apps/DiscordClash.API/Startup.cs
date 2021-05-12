@@ -1,6 +1,9 @@
+using Discord.WebSocket;
 using DiscordClash.API.Extensions;
+using DiscordClash.Application.Handlers;
 using EasyNetQ;
 using Figgle;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,8 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Reflection;
-using DiscordClash.Application.Handlers;
-using MediatR;
 
 namespace DiscordClash.API
 {
@@ -31,8 +32,10 @@ namespace DiscordClash.API
                 .AddServices()
                 .AddInfrastructure()
                 .AddCustomHealthChecks(Configuration);
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddSingleton(new DiscordSocketClient());
             services.AddMediatR(typeof(CreateNewEventHandler));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             DisplayBanner();
         }
