@@ -1,4 +1,5 @@
-﻿using HealthChecks.UI.Client;
+﻿using DiscordClash.API.Settings;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +19,17 @@ namespace DiscordClash.API.Extensions
         {
             services.AddHealthChecks()
                 .AddRabbitMQ(rabbitConnectionString: configuration["rabbitMq:connectionString"]);
-            services.AddHealthChecksUI(opt =>
-                {
-                    opt.AddHealthCheckEndpoint(ApplicationName, "/health");
-                })
-                .AddInMemoryStorage();
+
+            var settings = configuration.GetSection("healthCheckUI").Get<HealthCheckUI>();
+            if (settings.IsEnabled)
+            {
+                services.AddHealthChecksUI(opt =>
+                    {
+                        opt.SetEvaluationTimeInSeconds(settings.EvaluationTimeInSeconds);
+                        opt.AddHealthCheckEndpoint(ApplicationName, "/health");
+                    })
+                    .AddInMemoryStorage();
+            }
 
             return services;
         }
