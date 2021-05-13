@@ -27,7 +27,7 @@ namespace DiscordClash.Application.UseCases
         public async Task Execute(CreateNewEvent cmd)
         {
             var msg = _mapper.Map<NewEvent>(cmd);
-            await _bus.SendReceive.SendAsync(Queues.Events, msg);
+            await _bus.SendReceive.SendAsync(Queues.NewEvent, msg);
             _logger.LogInformation("CreateNewEvent message was send - {@msg}", msg);
 
             var @event = _mapper.Map<Event>(cmd);

@@ -21,7 +21,7 @@ namespace DiscordClash.Bot.Handlers
 
         public void ProcessMessages()
         {
-            _bus.SendReceive.Receive<NewEvent>(Queues.Events, HandleMessage);
+            _bus.SendReceive.Receive<NewEvent>(Queues.NewEvent, HandleMessage);
         }
 
         private async Task HandleMessage(NewEvent msg)
