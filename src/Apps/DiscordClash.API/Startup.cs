@@ -1,4 +1,5 @@
 using DiscordClash.API.Extensions;
+using DiscordClash.Infrastructure.Config;
 using EasyNetQ;
 using Figgle;
 using Microsoft.AspNetCore.Builder;
@@ -24,10 +25,11 @@ namespace DiscordClash.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.Configure<MongoDb>(Configuration.GetSection("mongoDb"));
             services.AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]));
             services.AddConfiguredSwagger()
                 .AddServices()
-                .AddInfrastructure()
+                .AddInfrastructure(Configuration)
                 .AddCustomHealthChecks(Configuration);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

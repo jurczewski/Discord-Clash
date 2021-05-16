@@ -6,10 +6,30 @@ version: "3.2"
 services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: "rabbitmq"
     ports:
       - 5672:5672
       - 15672:15672
     volumes:
       - c:/data/rabbitmq/data/:/var/lib/rabbitmq/mnesia
       - c:/data/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - discord-clash
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: discordClash
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - C:/data/mongo/db:/data/db
+      - C:/data/mongo/configdb:/data/configdb
+    networks:
+      - discord-clash
+
+networks:
+  discord-clash:
+    driver: bridge
