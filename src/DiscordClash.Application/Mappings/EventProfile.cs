@@ -10,8 +10,8 @@ namespace DiscordClash.Application.Mappings
     {
         public EventProfile()
         {
-            CreateMap<CreateNewEvent, NewEvent>().ReverseMap();
-            CreateMap<CreateNewEvent, Event>().ReverseMap();
+            CreateMap<CreateNewEvent, NewEvent>();
+            CreateMap<CreateNewEvent, Event>();
 
             CreateMap<Commands.Game, Messages.Game>().ConvertUsingEnumMapping();
             CreateMap<Commands.Game, Core.Domain.Game>().ConvertUsingEnumMapping();

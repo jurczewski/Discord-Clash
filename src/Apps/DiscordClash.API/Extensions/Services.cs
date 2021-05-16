@@ -13,6 +13,7 @@ namespace DiscordClash.API.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddTransient<CreateNewEventUseCase>();
+            services.AddTransient<RemoveEventUseCase>();
 
             return services;
         }

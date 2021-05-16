@@ -26,5 +26,18 @@ namespace DiscordClash.API.Controllers
 
             return new CreatedResult($"{guid}", null);
         }
+
+        /// <summary>
+        /// Remove event.
+        /// </summary>
+        /// <param name="apiUseCase"></param>
+        /// <param name="id">Event id.</param>
+        /// <response code="204">Event was successfully updated.</response>
+        [HttpDelete]
+        public async Task<IActionResult> RemoveEvent([FromServices] RemoveEventUseCase apiUseCase, Guid id)
+        {
+            await apiUseCase.Execute(id);
+            return NoContent();
+        }
     }
 }
