@@ -18,7 +18,8 @@ namespace DiscordClash.API.Extensions
         public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHealthChecks()
-                .AddRabbitMQ(rabbitConnectionString: configuration["rabbitMq:connectionString"]);
+                .AddRabbitMQ(rabbitConnectionString: configuration["rabbitMq:connectionString"])
+                .AddMongoDb(configuration["mongoDb:connectionString"]);
 
             var settings = configuration.GetSection("healthCheckUI").Get<HealthCheckUI>();
             if (settings.IsEnabled)
