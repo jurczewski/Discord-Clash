@@ -1,0 +1,31 @@
+﻿using DiscordClash.Core.Repositories;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace DiscordClash.Application.UseCases
+{
+    public class RemoveEventUseCase
+    {
+        private readonly IEventRepository _eventRepository;
+        private readonly ILogger<CreateNewEventUseCase> _logger;
+
+        public RemoveEventUseCase(IEventRepository eventRepository, ILogger<CreateNewEventUseCase> logger)
+        {
+            _eventRepository = eventRepository;
+            _logger = logger;
+        }
+
+        public async Task Execute(Guid id)
+        {
+            var @event = _eventRepository.Get(id);
+            if (@event is null)
+            {
+                throw new KeyNotFoundException($"Event with id: '{id}', does not exists.");
+            }
+            await _eventRepository.Delete(id);
+            _logger.LogInformation("Event was removed - {@event}", @event);
+        }
+    }
+}
