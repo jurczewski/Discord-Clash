@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -32,6 +33,11 @@ namespace DiscordClash.API.Middleware
 
                 switch (error)
                 {
+                    case ValidationException e:
+                        // validation failed
+                        response.StatusCode = (int)HttpStatusCode.Conflict;
+                        _logger.LogWarning(e, $"{e.GetType().Name}: {e.Message}");
+                        break;
                     case KeyNotFoundException e:
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -44,7 +50,8 @@ namespace DiscordClash.API.Middleware
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error.Message });
+                var msg = response.StatusCode == (int)HttpStatusCode.InternalServerError ? "Unhandled error" : error.Message;
+                var result = JsonSerializer.Serialize(new { message = msg });
                 await response.WriteAsync(result);
             }
         }
