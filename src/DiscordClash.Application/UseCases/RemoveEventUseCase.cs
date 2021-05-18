@@ -19,7 +19,7 @@ namespace DiscordClash.Application.UseCases
 
         public async Task Execute(Guid id)
         {
-            var @event = _eventRepository.Get(id);
+            var @event = await _eventRepository.Get(id);
             if (@event is null)
             {
                 throw new KeyNotFoundException($"Event with id: '{id}', does not exists.");

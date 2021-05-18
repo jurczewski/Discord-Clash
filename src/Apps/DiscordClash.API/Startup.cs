@@ -1,4 +1,5 @@
 using DiscordClash.API.Extensions;
+using DiscordClash.API.Middleware;
 using DiscordClash.Infrastructure.Config;
 using EasyNetQ;
 using Figgle;
@@ -54,6 +55,9 @@ namespace DiscordClash.API
                 .AllowAnyHeader()
                 .AllowCredentials()
                 .WithExposedHeaders("Location"));
+
+            // Global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseAuthorization();
             app.UseHttpsRedirection();

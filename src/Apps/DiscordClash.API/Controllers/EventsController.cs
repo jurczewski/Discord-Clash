@@ -33,7 +33,7 @@ namespace DiscordClash.API.Controllers
         /// <param name="apiUseCase"></param>
         /// <param name="id">Event id.</param>
         /// <response code="204">Event was successfully updated.</response>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> RemoveEvent([FromServices] RemoveEventUseCase apiUseCase, Guid id)
         {
             await apiUseCase.Execute(id);

@@ -15,3 +15,7 @@ Content-Type: application/json
     "isFree": true,
     "gameCode": 0
 }
+
+### Remove event
+DELETE  {{url}}/events/{{eventId}}
+Content-Type: application/json
