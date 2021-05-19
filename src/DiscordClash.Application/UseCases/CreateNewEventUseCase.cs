@@ -13,10 +13,10 @@ namespace DiscordClash.Application.UseCases
     {
         private readonly IBus _bus;
         private readonly IMapper _mapper;
-        private readonly IEventRepository _eventRepository;
+        private readonly IGenericRepository<Event> _eventRepository;
         private readonly ILogger<CreateNewEventUseCase> _logger;
 
-        public CreateNewEventUseCase(IBus bus, IMapper mapper, IEventRepository eventRepository, ILogger<CreateNewEventUseCase> logger)
+        public CreateNewEventUseCase(IBus bus, IMapper mapper, IGenericRepository<Event> eventRepository, ILogger<CreateNewEventUseCase> logger)
         {
             _bus = bus;
             _mapper = mapper;

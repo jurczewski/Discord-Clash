@@ -1,4 +1,5 @@
-﻿using DiscordClash.Core.Repositories;
+﻿using DiscordClash.Core.Domain;
+using DiscordClash.Core.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ namespace DiscordClash.Application.UseCases
 {
     public class RemoveEventUseCase
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IGenericRepository<Event> _eventRepository;
         private readonly ILogger<CreateNewEventUseCase> _logger;
 
-        public RemoveEventUseCase(IEventRepository eventRepository, ILogger<CreateNewEventUseCase> logger)
+        public RemoveEventUseCase(IGenericRepository<Event> eventRepository, ILogger<CreateNewEventUseCase> logger)
         {
             _eventRepository = eventRepository;
             _logger = logger;

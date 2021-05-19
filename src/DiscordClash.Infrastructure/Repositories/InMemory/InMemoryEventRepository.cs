@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DiscordClash.Infrastructure.Repositories.InMemory
 {
-    public class InMemoryEventRepository : IEventRepository
+    public class InMemoryEventRepository : IGenericRepository<Event>
     {
         private readonly ISet<Event> _events = new HashSet<Event>();
 

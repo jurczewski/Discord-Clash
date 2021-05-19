@@ -1,6 +1,8 @@
 ﻿using DiscordClash.Application.UseCases;
+using DiscordClash.Core.Domain;
 using DiscordClash.Core.Repositories;
 using DiscordClash.Infrastructure.Config;
+using DiscordClash.Infrastructure.Dto;
 using DiscordClash.Infrastructure.Repositories;
 using DiscordClash.Infrastructure.Repositories.InMemory;
 using Microsoft.Extensions.Configuration;
@@ -23,11 +25,11 @@ namespace DiscordClash.API.Extensions
             var inMemory = configuration.GetSection("mongoDb").Get<MongoDb>().UseDbInMemory;
             if (inMemory)
             {
-                services.AddTransient<IEventRepository, InMemoryEventRepository>();
+                services.AddTransient<IGenericRepository<Event>, InMemoryEventRepository>();
             }
             else
             {
-                services.AddTransient<IEventRepository, EventRepository>();
+                services.AddTransient<IGenericRepository<Event>, MongoGenericRepository<EventDb, Event>>();
             }
 
             return services;
