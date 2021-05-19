@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DiscordClash.Core.Domain
 {
-    public class Event
+    public class Event : Entity
     {
-        public Guid Id { get; protected set; }
         public string FullName { get; protected set; }
         public DateTime StarTime { get; protected set; }
         public DateTime EndTime { get; protected set; }
@@ -13,8 +12,6 @@ namespace DiscordClash.Core.Domain
         public string City { get; protected set; }
         public bool IsFree { get; protected set; }
         public Game GameCode { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
 
         public Event() { }
 

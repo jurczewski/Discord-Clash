@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DiscordClash.Core.Domain;
 using DiscordClash.Core.Repositories;
 using DiscordClash.Infrastructure.Config;
 using DiscordClash.Infrastructure.Dto;
@@ -7,12 +8,17 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DiscordClash.Infrastructure.Repositories
 {
-    //todo: add entity do domain
-    public class MongoGenericRepository<TDtoDb, TDomain> : IGenericRepository<TDomain> where TDomain : class where TDtoDb : Document
+    /// <summary>
+    /// Mongo implementation of generic repository pattern.
+    /// </summary>
+    /// <typeparam name="TDomain">Domain object, inheriting from Entity object.</typeparam>
+    /// <typeparam name="TDtoDb">Dto for DataBase.</typeparam>
+    public class MongoGenericRepository<TDomain, TDtoDb> : IGenericRepository<TDomain> where TDomain : Entity where TDtoDb : Document
     {
         private readonly IMongoCollection<TDtoDb> _collection;
         private readonly IMapper _mapper;
@@ -24,7 +30,7 @@ namespace DiscordClash.Infrastructure.Repositories
             _collection = database.GetCollection<TDtoDb>(GetCollectionName(typeof(TDtoDb)));
         }
 
-        private static string GetCollectionName(Type documentType)
+        private static string GetCollectionName(ICustomAttributeProvider documentType)
         {
             return ((BsonCollectionAttribute)documentType.GetCustomAttributes(
                     typeof(BsonCollectionAttribute),
