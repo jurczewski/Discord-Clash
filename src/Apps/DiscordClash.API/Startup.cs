@@ -33,6 +33,7 @@ namespace DiscordClash.API
                 .AddInfrastructure(Configuration)
                 .AddCustomHealthChecks(Configuration);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.ProcessReceivedMessages();
 
             DisplayBanner();
         }

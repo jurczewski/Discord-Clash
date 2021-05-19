@@ -12,6 +12,7 @@ namespace DiscordClash.Core.Domain
         public string City { get; protected set; }
         public bool IsFree { get; protected set; }
         public Game GameCode { get; protected set; }
+        public ulong DiscordMessageId { get; protected set; }
 
         public Event() { }
 
@@ -49,6 +50,12 @@ namespace DiscordClash.Core.Domain
 
             StarTime = startTime;
             EndTime = endTime;
+            UpdatedAt = DateTime.Now;
+        }
+
+        public void SetDiscordMessageId(ulong discordMessageId)
+        {
+            DiscordMessageId = discordMessageId;
             UpdatedAt = DateTime.Now;
         }
     }

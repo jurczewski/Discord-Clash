@@ -1,11 +1,11 @@
-﻿using DiscordClash.Core.Domain;
-using DiscordClash.Core.Repositories;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DiscordClash.Core.Domain;
+using DiscordClash.Core.Repositories;
+using Microsoft.Extensions.Logging;
 
-namespace DiscordClash.Application.UseCases
+namespace DiscordClash.Application.UseCases.API
 {
     public class RemoveEventUseCase
     {

@@ -12,8 +12,7 @@ namespace DiscordClash.Infrastructure.Dto
         public string City { get; set; }
         public bool IsFree { get; set; }
         public Game GameCode { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; set; }
+        public ulong DiscordMessageId { get; protected set; }
     }
 
     public enum Game

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using DiscordClash.Application.Messages;
-using DiscordClash.Application.UseCases;
+﻿using DiscordClash.Application.Messages;
 using EasyNetQ;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using DiscordClash.Application.UseCases.Bot;
 
 namespace DiscordClash.Bot.Handlers
 {
