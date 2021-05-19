@@ -3,13 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DiscordClash.Core.Domain
 {
-    public class User
+    public class User : Entity
     {
-        public Guid Id { get; protected set; }
         public string DiscordId { get; protected set; }
         public string DiscordNickname { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
 
         public User(Guid id, string discordId, string discordNickname)
         {
