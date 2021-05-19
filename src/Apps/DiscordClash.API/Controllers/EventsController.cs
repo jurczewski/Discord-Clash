@@ -1,8 +1,8 @@
 ﻿using DiscordClash.Application.Commands;
-using DiscordClash.Application.UseCases;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using DiscordClash.Application.UseCases.API;
 
 namespace DiscordClash.API.Controllers
 {

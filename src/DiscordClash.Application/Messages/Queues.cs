@@ -8,5 +8,6 @@ namespace DiscordClash.Application.Messages
     public static class Queues
     {
         public static string NewEvent => $"{nameof(Event)}.{nameof(Messages.NewEvent)}";
+        public static string PairMsgWithEvent => $"{nameof(Event)}.{nameof(PairDiscordMsgWithEvent)}";
     }
 }

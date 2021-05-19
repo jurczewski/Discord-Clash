@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using DiscordClash.Application.Commands;
 using DiscordClash.Application.Messages;
 using DiscordClash.Core.Domain;
 using DiscordClash.Core.Repositories;
 using EasyNetQ;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
-namespace DiscordClash.Application.UseCases
+namespace DiscordClash.Application.UseCases.API
 {
     public class CreateNewEventUseCase
     {

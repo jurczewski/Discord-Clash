@@ -1,4 +1,4 @@
-﻿using DiscordClash.Application.UseCases;
+﻿using DiscordClash.Application.UseCases.API;
 using DiscordClash.Core.Domain;
 using DiscordClash.Core.Repositories;
 using DiscordClash.Infrastructure.Config;
@@ -15,6 +15,9 @@ namespace DiscordClash.API.Extensions
         {
             services.AddTransient<CreateNewEventUseCase>();
             services.AddTransient<RemoveEventUseCase>();
+            services.AddTransient<PairDiscordMsgWithEventUseCase>();
+
+            services.AddTransient<MessageHandler>();
 
             return services;
         }
@@ -32,6 +35,17 @@ namespace DiscordClash.API.Extensions
             }
 
             return services;
+        }
+
+        /// <summary>
+        /// Process all received messages from RabbitMQ
+        /// </summary>
+        /// <param name="services"></param>
+        public static void ProcessReceivedMessages(this IServiceCollection services)
+        {
+            var provider = services.BuildServiceProvider();
+            var msgService = provider.GetService<MessageHandler>();
+            msgService?.ProcessMessages();
         }
     }
 }

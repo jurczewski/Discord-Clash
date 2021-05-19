@@ -4,6 +4,7 @@ namespace DiscordClash.Application.Messages
 {
     public record NewEvent : IMessage
     {
+        public Guid Id { get; set; }
         public string FullName { get; set; }
         public DateTime StarTime { get; set; }
         public DateTime EndTime { get; set; }

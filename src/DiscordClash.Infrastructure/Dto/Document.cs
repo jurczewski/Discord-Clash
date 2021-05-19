@@ -9,5 +9,7 @@ namespace DiscordClash.Infrastructure.Dto
         [BsonId]
         [BsonRepresentation(BsonType.String)]
         public Guid Id { get; set; }
+        public DateTime CreatedAt { get; protected set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
-using DiscordClash.Application.UseCases;
 using DiscordClash.Bot.Handlers;
 using DiscordClash.Bot.Infrastructure;
 using EasyNetQ;
@@ -14,6 +13,7 @@ using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using DiscordClash.Application.UseCases.Bot;
 
 namespace DiscordClash.Bot
 {
