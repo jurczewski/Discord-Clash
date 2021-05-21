@@ -1,8 +1,8 @@
 ﻿using DiscordClash.Application.Commands;
+using DiscordClash.Application.UseCases.API;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using DiscordClash.Application.UseCases.API;
 
 namespace DiscordClash.API.Controllers
 {
@@ -37,6 +37,14 @@ namespace DiscordClash.API.Controllers
         public async Task<IActionResult> RemoveEvent([FromServices] RemoveEventUseCase apiUseCase, Guid id)
         {
             await apiUseCase.Execute(id);
+            return NoContent();
+        }
+
+
+        [HttpPost("sign-up")]
+        public async Task<IActionResult> SignUpToEvent([FromServices] SignUpToEventUseCase apiUseCase, SignUpToEvent cmd)
+        {
+            await apiUseCase.Execute(cmd);
             return NoContent();
         }
     }

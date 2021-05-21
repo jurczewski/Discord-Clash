@@ -16,6 +16,8 @@ namespace DiscordClash.API.Extensions
             services.AddTransient<CreateNewEventUseCase>();
             services.AddTransient<RemoveEventUseCase>();
             services.AddTransient<PairDiscordMsgWithEventUseCase>();
+            services.AddTransient<SignUpToEventUseCase>();
+            services.AddTransient<GetAllEventsUseCase>();
 
             services.AddTransient<MessageHandler>();
 
@@ -28,10 +30,14 @@ namespace DiscordClash.API.Extensions
             if (inMemory)
             {
                 services.AddTransient<IGenericRepository<Event>, InMemoryGenericRepository<Event>>();
+                services.AddTransient<IGenericRepository<User>, InMemoryGenericRepository<User>>();
+                services.AddTransient<IGenericRepository<Choice>, InMemoryGenericRepository<Choice>>();
             }
             else
             {
                 services.AddTransient<IGenericRepository<Event>, MongoGenericRepository<Event, EventDb>>();
+                services.AddTransient<IGenericRepository<User>, MongoGenericRepository<User, UserDb>>();
+                services.AddTransient<IGenericRepository<Choice>, MongoGenericRepository<Choice, ChoiceDb>>();
             }
 
             return services;

@@ -5,6 +5,7 @@ version: "3.2"
 
 services:
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management-alpine
     ports:
       - 5672:5672
@@ -16,6 +17,7 @@ services:
       - discord-clash
 
   mongo:
+    container_name: mongodb
     image: mongo
     restart: always
     ports:
