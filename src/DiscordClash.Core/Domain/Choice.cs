@@ -7,7 +7,5 @@ namespace DiscordClash.Core.Domain
         public Guid EventId { get; protected set; }
         public Guid UserId { get; protected set; }
         public uint Label { get; protected set; }
-
-        public Choice() { }
     }
 }

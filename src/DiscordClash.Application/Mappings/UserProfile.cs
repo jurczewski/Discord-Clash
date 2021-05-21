@@ -9,9 +9,9 @@ namespace DiscordClash.Application.Mappings
     {
         public UserProfile()
         {
-            CreateMap<UserCmd, User>();
-            //.ForMember(dest => dest.Id, config => config.MapFrom(src => Guid.NewGuid()))
-            //.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now));
+            CreateMap<UserCmd, User>()
+                .ForMember(dest => dest.Id, config => config.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }
