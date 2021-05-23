@@ -79,7 +79,7 @@ namespace DiscordClash.Bot
             services.AddRefitClient<IDiscordClashApi>()
                 .ConfigureHttpClient(c =>
                 {
-                    c.BaseAddress = new Uri("https://localhost:5001"); //todo: move to appsettings
+                    c.BaseAddress = new Uri(Configuration["discordClashApi:url"]);
                     c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 })
                 .AddPolicyHandler(HttpClientInfrastructure.GetNotFoundRetryPolicy())
