@@ -34,6 +34,7 @@ namespace DiscordClash.API.Extensions
                 services.AddTransient<IGenericRepository<Choice>, InMemoryGenericRepository<Choice>>();
                 services.AddTransient<IGenericRepository<User>, InMemoryGenericRepository<User>>();
                 services.AddTransient<IUserRepository, InMemoryUserRepository>();
+                services.AddTransient<IEventRepository, InMemoryEventRepository>();
             }
             else
             {
@@ -41,6 +42,7 @@ namespace DiscordClash.API.Extensions
                 services.AddTransient<IGenericRepository<Choice>, MongoGenericRepository<Choice, ChoiceDb>>();
                 services.AddTransient<IGenericRepository<User>, MongoGenericRepository<User, UserDb>>();
                 services.AddTransient<IUserRepository, MongoUserRepository>();
+                services.AddTransient<IEventRepository, MongoEventRepository>();
             }
 
             return services;

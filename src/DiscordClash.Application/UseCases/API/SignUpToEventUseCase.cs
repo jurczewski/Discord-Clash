@@ -13,10 +13,10 @@ namespace DiscordClash.Application.UseCases.API
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IGenericRepository<Choice> _choiceRepository;
-        private readonly IGenericRepository<Event> _eventRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly ILogger<CreateNewEventUseCase> _logger;
 
-        public SignUpToEventUseCase(IMapper mapper, IUserRepository userRepository, ILogger<CreateNewEventUseCase> logger, IGenericRepository<Choice> choiceRepository, IGenericRepository<Event> eventRepository)
+        public SignUpToEventUseCase(IMapper mapper, IUserRepository userRepository, ILogger<CreateNewEventUseCase> logger, IGenericRepository<Choice> choiceRepository, IEventRepository eventRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
@@ -35,10 +35,15 @@ namespace DiscordClash.Application.UseCases.API
                 _logger.LogInformation("New user was added: {@user}", user);
             }
 
-            var @event = await _eventRepository.Get(cmd.EventId);
-            if (@event is null) throw new KeyNotFoundException($"Event with id: {cmd.EventId} does not exists.");
+            var @event = await _eventRepository.GetByMessageId(cmd.EventMsgId);
+            if (@event is null) throw new KeyNotFoundException($"Event with discord msg id: {cmd.EventMsgId} does not exists.");
 
-            var choice = _mapper.Map<Choice>(cmd, opt => opt.AfterMap((_, dest) => dest.SetUserId(user.Id)));
+            var choice = _mapper.Map<Choice>(cmd, opt => opt.AfterMap((_, dest) =>
+            {
+                dest.SetUserId(user.Id);
+                dest.SetEventId(@event.Id);
+            }));
+
             await _choiceRepository.Add(choice);
             _logger.LogInformation("New user's choice was added to DB: {@choice}", choice);
         }

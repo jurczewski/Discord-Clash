@@ -26,9 +26,9 @@ Content-Type: application/json
 
 {
     "user": {
-        "discordId": "discordId",
-        "discordNickname": "jurczewski#1234"
+        "discordId": 393905926073090055,
+        "discordNickname": "jurczewski#2292"
     },
-    "eventId": "{{eventId}}",
-    "Choice": 5
+    "eventMsgId": 845991619425730580,
+    "choice": 5
 }

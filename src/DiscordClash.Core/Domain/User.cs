@@ -1,16 +1,17 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace DiscordClash.Core.Domain
 {
     public class User : Entity
     {
-        public string DiscordId { get; protected set; }
+        public ulong DiscordId { get; protected set; }
         public string DiscordNickname { get; protected set; }
 
         public User() { }
 
-        public User(Guid id, string discordId, string discordNickname)
+        public User(Guid id, ulong discordId, string discordNickname)
         {
             Id = id;
             SetDiscordData(discordId, discordNickname);
@@ -19,16 +20,21 @@ namespace DiscordClash.Core.Domain
             UpdatedAt = null;
         }
 
-        public void SetDiscordData(string discordId, string discordNickname)
+        public void SetDiscordData(ulong discordId, string discordNickname)
         {
-            if (string.IsNullOrEmpty(discordId))
+            if (discordId == 0)
             {
-                throw new ValidationException("User's discord Id cannot be empty.");
+                throw new ValidationException("User's discord Id cannot be 0.");
             }
 
             if (string.IsNullOrEmpty(discordNickname))
             {
                 throw new ValidationException("User's discord Id cannot be empty.");
+            }
+
+            if (!Regex.IsMatch(discordNickname, "^.{3,32}#[0-9]{4}$"))
+            {
+                throw new ValidationException($"Discord nickname is invalid: {discordNickname}");
             }
 
             DiscordId = discordId;

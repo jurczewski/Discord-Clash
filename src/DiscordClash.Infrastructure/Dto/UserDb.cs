@@ -3,7 +3,7 @@
     [BsonCollection("users")]
     public class UserDb : Document
     {
-        public string DiscordId { get; set; }
+        public ulong DiscordId { get; set; }
         public string DiscordNickname { get; set; }
     }
 }

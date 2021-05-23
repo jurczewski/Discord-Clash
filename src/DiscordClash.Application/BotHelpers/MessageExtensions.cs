@@ -43,5 +43,10 @@ namespace DiscordClash.Application.BotHelpers
                 f.Value = cmd.GameCode;
             });
         }
+
+        public static string GetFullNickName(this IUser user)
+        {
+            return $"{user.Username}#{user.Discriminator}";
+        }
     }
 }

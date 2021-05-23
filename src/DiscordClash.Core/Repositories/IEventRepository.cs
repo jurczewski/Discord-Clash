@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace DiscordClash.Core.Repositories
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IEventRepository
     {
-        Task<User> GetByDiscordId(ulong discordId);
+        Task<Event> GetByMessageId(ulong discordMessageId);
     }
 }

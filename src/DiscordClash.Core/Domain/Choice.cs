@@ -15,5 +15,12 @@ namespace DiscordClash.Core.Domain
 
             UserId = id;
         }
+
+        public void SetEventId(Guid id)
+        {
+            if (id == Guid.Empty) throw new ValidationException("Event id cannot be empty guid.");
+
+            EventId = id;
+        }
     }
 }
