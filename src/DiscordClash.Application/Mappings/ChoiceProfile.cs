@@ -10,6 +10,7 @@ namespace DiscordClash.Application.Mappings
         public ChoiceProfile()
         {
             CreateMap<SignUpToEvent, Choice>()
+                .ForMember(dest => dest.Label, config => config.MapFrom(src => src.Choice))
                 .ForMember(dest => dest.Id, config => config.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now));
         }

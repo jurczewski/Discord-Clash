@@ -20,8 +20,8 @@ namespace DiscordClash.Infrastructure.Repositories
     /// <typeparam name="TDtoDb">Dto for DataBase.</typeparam>
     public class MongoGenericRepository<TDomain, TDtoDb> : IGenericRepository<TDomain> where TDomain : Entity where TDtoDb : Document
     {
-        private readonly IMongoCollection<TDtoDb> _collection;
-        private readonly IMapper _mapper;
+        protected readonly IMongoCollection<TDtoDb> _collection;
+        protected readonly IMapper _mapper;
 
         public MongoGenericRepository(IOptions<MongoDb> settings, IMapper mapper)
         {

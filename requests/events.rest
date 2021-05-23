@@ -29,6 +29,6 @@ Content-Type: application/json
         "discordId": "discordId",
         "discordNickname": "jurczewski#1234"
     },
-    "eventId": "bcc9cd95-8bb2-42c5-af1c-a786c7b93b8f",
+    "eventId": "{{eventId}}",
     "Choice": 5
 }

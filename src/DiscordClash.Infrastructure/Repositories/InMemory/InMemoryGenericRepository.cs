@@ -1,15 +1,15 @@
-﻿using System;
+﻿using DiscordClash.Core.Domain;
+using DiscordClash.Core.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DiscordClash.Core.Domain;
-using DiscordClash.Core.Repositories;
 
-namespace DiscordClash.Infrastructure.Repositories
+namespace DiscordClash.Infrastructure.Repositories.InMemory
 {
     public class InMemoryGenericRepository<TDomain> : IGenericRepository<TDomain> where TDomain : Entity
     {
-        private readonly ISet<TDomain> _collection = new HashSet<TDomain>();
+        protected readonly ISet<TDomain> _collection = new HashSet<TDomain>();
 
         public async Task<TDomain> Get(Guid id)
             => await Task.FromResult(_collection.SingleOrDefault(x => x.Id == id));
