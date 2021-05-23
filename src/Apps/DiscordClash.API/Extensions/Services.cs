@@ -34,7 +34,7 @@ namespace DiscordClash.API.Extensions
                 services.AddTransient<IGenericRepository<Choice>, InMemoryGenericRepository<Choice>>();
                 services.AddTransient<IGenericRepository<User>, InMemoryGenericRepository<User>>();
                 services.AddTransient<IUserRepository, InMemoryUserRepository>();
-                //todo: event repo
+                services.AddTransient<IEventRepository, InMemoryEventRepository>();
             }
             else
             {
