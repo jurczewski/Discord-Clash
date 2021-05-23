@@ -34,11 +34,11 @@ namespace DiscordClash.Application.UseCases.API
                 await _userRepository.Add(user);
                 _logger.LogInformation("New user was added: {@user}", user);
             }
+
             var @event = await _eventRepository.Get(cmd.EventId);
             if (@event is null) throw new KeyNotFoundException($"Event with id: {cmd.EventId} does not exists.");
 
-            //todo: UserId missing
-            var choice = _mapper.Map<Choice>(cmd); //, opt => opt.BeforeMap((src, dest) => dest.UserId = user.Id));
+            var choice = _mapper.Map<Choice>(cmd, opt => opt.AfterMap((_, dest) => dest.SetUserId(user.Id)));
             await _choiceRepository.Add(choice);
             _logger.LogInformation("New user's choice was added to DB: {@choice}", choice);
         }
