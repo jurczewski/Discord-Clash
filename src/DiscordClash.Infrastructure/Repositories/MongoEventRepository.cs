@@ -9,18 +9,17 @@ using System.Threading.Tasks;
 
 namespace DiscordClash.Infrastructure.Repositories
 {
-    public class MongoUserRepository : MongoGenericRepository<User, UserDb>, IUserRepository
+    public class MongoEventRepository : MongoGenericRepository<Event, EventDb>, IEventRepository
     {
-        public MongoUserRepository(IOptions<MongoDb> settings, IMapper mapper) : base(settings, mapper)
+        public MongoEventRepository(IOptions<MongoDb> settings, IMapper mapper) : base(settings, mapper)
         {
-
         }
 
-        public async Task<User> GetByDiscordId(ulong discordId)
+        public async Task<Event> GetByMessageId(ulong discordMessageId)
         {
-            var filter = Builders<UserDb>.Filter.Eq(doc => doc.DiscordId, discordId);
+            var filter = Builders<EventDb>.Filter.Eq(doc => doc.DiscordMessageId, discordMessageId);
             var dto = await Collection.Find(filter).SingleOrDefaultAsync();
-            return Mapper.Map<User>(dto);
+            return Mapper.Map<Event>(dto);
         }
     }
 }

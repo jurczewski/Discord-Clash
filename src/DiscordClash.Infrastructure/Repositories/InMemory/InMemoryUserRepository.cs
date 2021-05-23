@@ -7,7 +7,7 @@ namespace DiscordClash.Infrastructure.Repositories.InMemory
 {
     public class InMemoryUserRepository : InMemoryGenericRepository<User>, IUserRepository
     {
-        public async Task<User> GetByDiscordId(string discordId)
+        public async Task<User> GetByDiscordId(ulong discordId)
             => await Task.FromResult(Collection.SingleOrDefault(x => x.DiscordId == discordId));
     }
 }

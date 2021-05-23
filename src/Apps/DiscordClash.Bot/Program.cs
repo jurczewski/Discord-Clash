@@ -2,6 +2,8 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
+using DiscordClash.Application.UseCases.Bot;
+using DiscordClash.Bot.Endpoints;
 using DiscordClash.Bot.Handlers;
 using DiscordClash.Bot.Infrastructure;
 using EasyNetQ;
@@ -9,11 +11,12 @@ using Figgle;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Refit;
 using System;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using DiscordClash.Application.UseCases.Bot;
 
 namespace DiscordClash.Bot
 {
@@ -72,6 +75,13 @@ namespace DiscordClash.Bot
             .AddSingleton(RabbitHutch.CreateBus(Configuration["rabbitMq:connectionString"]))
             .AddSingleton<MessageHandler>()
             .AddTransient<NotifyAboutNewEventUseCase>();
+
+            services.AddRefitClient<IDiscordClashApi>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri("https://localhost:5001"); //todo: move to appsettings
+                    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                }); //todo: add polly
         }
 
         private static void DisplayBanner()
