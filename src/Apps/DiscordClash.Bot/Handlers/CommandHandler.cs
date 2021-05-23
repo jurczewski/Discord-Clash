@@ -71,10 +71,8 @@ namespace DiscordClash.Bot.Handlers
             if (reaction.User.IsSpecified)
             {
                 var userValue = reaction.User.Value;
-                var discordNickName = $"{userValue.Username}#{userValue.Discriminator}";
-                //_logger.LogInformation("User {@userValue} (Id: '{@Id}) just added a reaction '{@Emote}' to {@Author}'s message ({@msgId}).", discordNickName, userValue.Id, reaction.Emote, message.Author, message.Id);
-                Console.WriteLine($"{userValue} (Id: '{userValue.Id}) just added a reaction '{reaction.Emote}' to {message.Author}'s message ({message.Id}).");
-                //todo: fix logger
+                var discordNickName = userValue.GetFullNickName();
+                _logger.LogInformation("User {@discordNickName} (Id: '{@Id}) just added a reaction '{@Emote}' to {@Author}'s message ({@msgId}).", discordNickName, userValue.Id, reaction.Emote.Name, message.Author.GetFullNickName(), message.Id);
 
                 var cmd = new SignUpToEvent
                 {
