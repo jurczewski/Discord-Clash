@@ -4,6 +4,7 @@ using DiscordClash.Core.Repositories;
 using DiscordClash.Infrastructure.Config;
 using DiscordClash.Infrastructure.Dto;
 using DiscordClash.Infrastructure.Repositories;
+using DiscordClash.Infrastructure.Repositories.InMemory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,8 @@ namespace DiscordClash.API.Extensions
             services.AddTransient<CreateNewEventUseCase>();
             services.AddTransient<RemoveEventUseCase>();
             services.AddTransient<PairDiscordMsgWithEventUseCase>();
+            services.AddTransient<SignUpToEventUseCase>();
+            services.AddTransient<GetAllEventsUseCase>();
 
             services.AddTransient<MessageHandler>();
 
@@ -28,10 +31,16 @@ namespace DiscordClash.API.Extensions
             if (inMemory)
             {
                 services.AddTransient<IGenericRepository<Event>, InMemoryGenericRepository<Event>>();
+                services.AddTransient<IGenericRepository<Choice>, InMemoryGenericRepository<Choice>>();
+                services.AddTransient<IGenericRepository<User>, InMemoryGenericRepository<User>>();
+                services.AddTransient<IUserRepository, InMemoryUserRepository>();
             }
             else
             {
                 services.AddTransient<IGenericRepository<Event>, MongoGenericRepository<Event, EventDb>>();
+                services.AddTransient<IGenericRepository<Choice>, MongoGenericRepository<Choice, ChoiceDb>>();
+                services.AddTransient<IGenericRepository<User>, MongoGenericRepository<User, UserDb>>();
+                services.AddTransient<IUserRepository, MongoUserRepository>();
             }
 
             return services;

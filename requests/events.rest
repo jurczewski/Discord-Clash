@@ -19,3 +19,16 @@ Content-Type: application/json
 ### Remove event
 DELETE  {{url}}/events/{{eventId}}
 Content-Type: application/json
+
+### Sign up to event
+POST {{url}}/events/sign-up
+Content-Type: application/json
+
+{
+    "user": {
+        "discordId": "discordId",
+        "discordNickname": "jurczewski#1234"
+    },
+    "eventId": "{{eventId}}",
+    "Choice": 5
+}
