@@ -56,8 +56,6 @@ namespace DiscordClash.Bot.Handlers
             }
         }
 
-        //todo: remove reaction (new task?)
-
         private async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> cachedMessage, ISocketMessageChannel originChannel, SocketReaction reaction)
         {
             var message = await cachedMessage.GetOrDownloadAsync();
@@ -84,8 +82,16 @@ namespace DiscordClash.Bot.Handlers
                     Choice = ParseEmoteToUint(reaction.Emote),
                     EventMsgId = message.Id
                 };
-                await _api.SignUpToEvent(cmd); //todo: check if 204
-                _logger.LogInformation("Request {request} was sent to API {@cmd}", nameof(SignUpToEvent), cmd);
+
+                try
+                {
+                    await _api.SignUpToEvent(cmd);
+                    _logger.LogInformation("Request {request} was sent to API {@cmd}", nameof(SignUpToEvent), cmd);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Unexpected error while sending a {@name} request. {@request}", nameof(SignUpToEvent), cmd);
+                }
             }
             else
             {
@@ -106,7 +112,6 @@ namespace DiscordClash.Bot.Handlers
             }
 
             return 3;
-
         }
     }
 }
