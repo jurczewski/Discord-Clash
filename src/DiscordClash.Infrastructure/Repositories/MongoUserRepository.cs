@@ -19,8 +19,8 @@ namespace DiscordClash.Infrastructure.Repositories
         public async Task<User> GetByDiscordId(string discordId)
         {
             var filter = Builders<UserDb>.Filter.Eq(doc => doc.DiscordId, discordId);
-            var dto = await _collection.Find(filter).SingleOrDefaultAsync();
-            return _mapper.Map<User>(dto);
+            var dto = await Collection.Find(filter).SingleOrDefaultAsync();
+            return Mapper.Map<User>(dto);
         }
     }
 }

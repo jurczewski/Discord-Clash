@@ -8,6 +8,6 @@ namespace DiscordClash.Infrastructure.Repositories.InMemory
     public class InMemoryUserRepository : InMemoryGenericRepository<User>, IUserRepository
     {
         public async Task<User> GetByDiscordId(string discordId)
-            => await Task.FromResult(_collection.SingleOrDefault(x => x.DiscordId == discordId));
+            => await Task.FromResult(Collection.SingleOrDefault(x => x.DiscordId == discordId));
     }
 }

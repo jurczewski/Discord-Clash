@@ -9,17 +9,17 @@ namespace DiscordClash.Infrastructure.Repositories.InMemory
 {
     public class InMemoryGenericRepository<TDomain> : IGenericRepository<TDomain> where TDomain : Entity
     {
-        protected readonly ISet<TDomain> _collection = new HashSet<TDomain>();
+        protected readonly ISet<TDomain> Collection = new HashSet<TDomain>();
 
         public async Task<TDomain> Get(Guid id)
-            => await Task.FromResult(_collection.SingleOrDefault(x => x.Id == id));
+            => await Task.FromResult(Collection.SingleOrDefault(x => x.Id == id));
 
         public async Task<IEnumerable<TDomain>> GetAll()
-            => await Task.FromResult(_collection);
+            => await Task.FromResult(Collection);
 
         public async Task Add(TDomain @event)
         {
-            _collection.Add(@event);
+            Collection.Add(@event);
             await Task.CompletedTask;
         }
 
@@ -28,8 +28,8 @@ namespace DiscordClash.Infrastructure.Repositories.InMemory
 
         public async Task Delete(Guid id)
         {
-            var @event = _collection.SingleOrDefault(x => x.Id == id);
-            _collection.Remove(@event);
+            var @event = Collection.SingleOrDefault(x => x.Id == id);
+            Collection.Remove(@event);
             await Task.CompletedTask;
         }
     }
