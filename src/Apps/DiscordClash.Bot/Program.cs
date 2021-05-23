@@ -81,7 +81,9 @@ namespace DiscordClash.Bot
                 {
                     c.BaseAddress = new Uri("https://localhost:5001"); //todo: move to appsettings
                     c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                }); //todo: add polly
+                })
+                .AddPolicyHandler(HttpClientInfrastructure.GetNotFoundRetryPolicy())
+                .AddPolicyHandler(HttpClientInfrastructure.GetCircuitBreakerPolicy());
         }
 
         private static void DisplayBanner()
