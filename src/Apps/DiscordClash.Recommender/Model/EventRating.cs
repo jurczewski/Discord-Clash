@@ -2,8 +2,8 @@
 {
     public record EventRating
     {
-        public double UserId { get; set; }
-        public double EventId { get; set; }
-        public uint Label { get; set; }
+        public double UserId;
+        public double EventId;
+        public float Label;
     }
 }
