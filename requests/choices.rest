@@ -1,0 +1,5 @@
+@url = https://localhost:5001
+
+### Get all users' choices
+GET  {{url}}/choices/
+Content-Type: application/json
