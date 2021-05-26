@@ -18,7 +18,7 @@ namespace DiscordClash.API.Extensions
             services.AddTransient<RemoveEventUseCase>();
             services.AddTransient<PairDiscordMsgWithEventUseCase>();
             services.AddTransient<SignUpToEventUseCase>();
-            services.AddTransient<GetAllEventsUseCase>();
+            services.AddTransient<GetAllChoicesUseCase>();
 
             services.AddTransient<MessageHandler>();
 

@@ -3,7 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
 using DiscordClash.Application.Commands;
-using DiscordClash.Bot.Endpoints;
+using DiscordClash.Application.Endpoints;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -65,6 +65,7 @@ namespace DiscordClash.Bot.Handlers
             await channel.Guild.DownloadUsersAsync();
 
             if (message.Author.Id != _discord.CurrentUser.Id) return;
+            if (reaction.User.Value.IsBot) return; // reactions from bot are skipped
 
             if (reaction.User.IsSpecified)
             {

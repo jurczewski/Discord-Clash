@@ -2,10 +2,10 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
+using DiscordClash.Application.Endpoints;
 using DiscordClash.Application.UseCases.Bot;
-using DiscordClash.Bot.Endpoints;
 using DiscordClash.Bot.Handlers;
-using DiscordClash.Bot.Infrastructure;
+using DiscordClash.Infrastructure;
 using EasyNetQ;
 using Figgle;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace DiscordClash.Bot
 {
-    public class Program
+    class Program
     {
         private static IConfigurationRoot Configuration { get; set; }
 

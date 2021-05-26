@@ -5,7 +5,7 @@ using Serilog.Exceptions;
 using Serilog.Sinks.SystemConsole.Themes;
 using System.Reflection;
 
-namespace DiscordClash.Bot.Infrastructure
+namespace DiscordClash.Infrastructure
 {
     public static class Logging
     {

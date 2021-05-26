@@ -4,9 +4,9 @@ using System;
 using System.Net;
 using System.Net.Http;
 
-namespace DiscordClash.Bot.Infrastructure
+namespace DiscordClash.Infrastructure
 {
-    internal class HttpClientInfrastructure
+    public class HttpClientInfrastructure
     {
         public static IAsyncPolicy<HttpResponseMessage> GetNotFoundRetryPolicy()
         {
