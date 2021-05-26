@@ -1,14 +1,13 @@
 ﻿using DiscordClash.Application.Endpoints;
-using DiscordClash.Application.Queries;
-using DiscordClash.Application.UseCases.Recommender.Model;
+using DiscordClash.Application.Mappings;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using Microsoft.ML.Trainers;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 // ReSharper disable RedundantArgumentDefaultValue
 
 namespace DiscordClash.Application.UseCases.Recommender
@@ -36,7 +35,7 @@ namespace DiscordClash.Application.UseCases.Recommender
         private async Task<(IDataView training, IDataView test)> LoadDataAsync(MLContext mlContext)
         {
             var choices = await _api.GetAllChoices();
-            var eventRatings = Map(choices).ToList();
+            var eventRatings = choices.Map().ToList();
 
             var data = mlContext.Data.LoadFromEnumerable(eventRatings);
             _logger.LogInformation("Loaded {@c} documents.", eventRatings.Count);
@@ -87,14 +86,6 @@ namespace DiscordClash.Application.UseCases.Recommender
             mlContext.Model.Save(model, trainingDataViewSchema, modelPath);
         }
 
-        private static IEnumerable<EventRating> Map(IEnumerable<ChoiceDto> src) //todo: move to profile
-        {
-            return src.Select(c => new EventRating
-            {
-                EventId = c.EventId.GetHashCode(),
-                UserId = c.UserId.GetHashCode(),
-                Label = c.Label
-            });
-        }
+
     }
 }
