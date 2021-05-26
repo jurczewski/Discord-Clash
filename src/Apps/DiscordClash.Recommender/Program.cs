@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
-using Serilog;
 using System;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -45,7 +44,7 @@ namespace DiscordClash.Recommender
                     await svc.Execute();
                     break;
                 default:
-                    Log.Logger.Information("Invalid command");
+                    Console.WriteLine("Invalid command");
                     break;
             }
         }

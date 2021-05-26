@@ -4,9 +4,12 @@ using DiscordClash.Application.UseCases.Recommender.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using Microsoft.ML.Trainers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+// ReSharper disable RedundantArgumentDefaultValue
 
 namespace DiscordClash.Application.UseCases.Recommender
 {
@@ -26,19 +29,22 @@ namespace DiscordClash.Application.UseCases.Recommender
             var mlContext = new MLContext();
             var (trainingDataView, testDataView) = await LoadDataAsync(mlContext);
             var model = BuildAndTrainModel(mlContext, trainingDataView);
+            EvaluateModel(mlContext, testDataView, model);
+            SaveModel(mlContext, trainingDataView.Schema, model);
         }
 
         private async Task<(IDataView training, IDataView test)> LoadDataAsync(MLContext mlContext)
         {
             var choices = await _api.GetAllChoices();
-            var eventRatings = Map(choices);
-            var data = mlContext.Data.LoadFromEnumerable(eventRatings);
+            var eventRatings = Map(choices).ToList();
 
-            //eventRatings.ForAll(Console.WriteLine); // todo: logger count
+            var data = mlContext.Data.LoadFromEnumerable(eventRatings);
+            _logger.LogInformation("Loaded {@c} documents.", eventRatings.Count);
 
             var trainTestData = mlContext.Data.TrainTestSplit(data, 0.2);
             var trainingDataView = trainTestData.TrainSet;
             var testDataView = trainTestData.TestSet;
+            _logger.LogInformation("Train/Test data was loaded.");
 
             return (trainingDataView, testDataView);
         }
@@ -62,6 +68,23 @@ namespace DiscordClash.Application.UseCases.Recommender
             ITransformer model = trainerEstimator.Fit(trainingDataView);
 
             return model;
+        }
+
+        private void EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
+        {
+            _logger.LogInformation("=============== Evaluating the model ===============");
+            var prediction = model.Transform(testDataView);
+            var metrics = mlContext.Regression.Evaluate(prediction, "Label", "Score");
+            _logger.LogInformation("Root Mean Squared Error : " + metrics.RootMeanSquaredError);
+            _logger.LogInformation("RSquared: " + metrics.RSquared);
+        }
+
+        private void SaveModel(MLContext mlContext, DataViewSchema trainingDataViewSchema, ITransformer model)
+        {
+            var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "EventRecommenderModel.zip");
+
+            _logger.LogInformation("=============== Saving the model to a file ===============");
+            mlContext.Model.Save(model, trainingDataViewSchema, modelPath);
         }
 
         private static IEnumerable<EventRating> Map(IEnumerable<ChoiceDto> src) //todo: move to profile
