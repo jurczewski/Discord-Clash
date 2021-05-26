@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build-api:
@@ -12,38 +12,57 @@ jobs:
     env:
       PROJECT_DIR: ./src/Apps/DiscordClash.API
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ${{ env.PROJECT_DIR }}
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: ${{ env.PROJECT_DIR }}
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: ${{ env.PROJECT_DIR }}
-      
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Build
+        run: dotnet build --no-restore
+        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+        working-directory: ${{ env.PROJECT_DIR }}
+
   build-bot:
     runs-on: ubuntu-latest
     env:
       PROJECT_DIR: ./src/Apps/DiscordClash.Bot
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ${{ env.PROJECT_DIR }}
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: ${{ env.PROJECT_DIR }}
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: ${{ env.PROJECT_DIR }}
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Build
+        run: dotnet build --no-restore
+        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+        working-directory: ${{ env.PROJECT_DIR }}
 
+  build-rs:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_DIR: ./src/Apps/DiscordClash.Recommender
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Build
+        run: dotnet build --no-restore
+        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+        working-directory: ${{ env.PROJECT_DIR }}
