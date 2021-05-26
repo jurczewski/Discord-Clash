@@ -1,14 +1,12 @@
-﻿using Cocona;
-using Cocona.Hosting;
-using DiscordClash.Application.Endpoints;
+﻿using DiscordClash.Application.Endpoints;
 using DiscordClash.Application.UseCases.Recommender;
 using DiscordClash.Infrastructure;
 using Figgle;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Refit;
+using Serilog;
 using System;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -24,7 +22,7 @@ namespace DiscordClash.Recommender
         {
             DisplayBanner();
 
-            var hostBuilder = Host.CreateDefaultBuilder()
+            var host = Host.CreateDefaultBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
                     builder.AddJsonFile("appsettings.json", true, true)
@@ -32,18 +30,24 @@ namespace DiscordClash.Recommender
                     Configuration = builder.Build();
                 })
                 .UseCustomLogging()
-                .ConfigureServices(RegisterServices);
+                .ConfigureServices(RegisterServices)
+                .Build();
 
-            var coconaHostBuilder = new CoconaAppHostBuilder(hostBuilder);
-
-            await coconaHostBuilder.RunAsync<Program>(args);
+            await ParseArgs(host, args[0]);
         }
 
-        [PrimaryCommand]
-        [Command("Train", Description = "Trains new model and saves it to database.")]
-        public async Task TrainModel([FromServices] TrainModelAndSaveItUseCase consoleUseCase)
+        private static async Task ParseArgs(IHost host, string command)
         {
-            await consoleUseCase.Execute();
+            switch (command)
+            {
+                case "train":
+                    var svc = ActivatorUtilities.CreateInstance<TrainModelAndSaveItUseCase>(host.Services);
+                    await svc.Execute();
+                    break;
+                default:
+                    Log.Logger.Information("Invalid command");
+                    break;
+            }
         }
 
         private static void RegisterServices(HostBuilderContext context, IServiceCollection services)
