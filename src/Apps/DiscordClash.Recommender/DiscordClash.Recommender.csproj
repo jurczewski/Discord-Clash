@@ -6,14 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cocona" Version="1.5.0" />
     <PackageReference Include="Figgle" Version="0.4.0" />
-    <PackageReference Include="Microsoft.ML" Version="1.5.5" />
-    <PackageReference Include="Microsoft.ML.Recommender" Version="0.17.5" />
     <PackageReference Include="refit" Version="6.0.38" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.0.38" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\DiscordClash.Application\DiscordClash.Application.csproj" />
+    <ProjectReference Include="..\..\DiscordClash.Infrastructure\DiscordClash.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

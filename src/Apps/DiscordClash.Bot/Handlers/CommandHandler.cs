@@ -3,7 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordClash.Application.BotHelpers;
 using DiscordClash.Application.Commands;
-using DiscordClash.Bot.Endpoints;
+using DiscordClash.Application.Endpoints;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;

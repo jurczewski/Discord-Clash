@@ -1,74 +1,63 @@
-﻿using DiscordClash.Application.Queries;
-using DiscordClash.Recommender.Endpoints;
-using DiscordClash.Recommender.Model;
+﻿using Cocona;
+using Cocona.Hosting;
+using DiscordClash.Application.Endpoints;
+using DiscordClash.Application.UseCases.Recommender;
+using DiscordClash.Infrastructure;
 using Figgle;
-using Microsoft.ML;
-using Microsoft.ML.Trainers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Refit;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DiscordClash.Recommender
 {
-    public class Program
+    class Program
     {
-        private static async Task Main()
+        private static IConfigurationRoot Configuration { get; set; }
+
+        private static async Task Main(string[] args)
         {
             DisplayBanner();
 
-            var mlContext = new MLContext();
-            var (trainingDataView, testDataView) = await LoadDataAsync(mlContext);
-            var model = BuildAndTrainModel(mlContext, trainingDataView);
+            var hostBuilder = Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.AddJsonFile("appsettings.json", true, true)
+                        .AddEnvironmentVariables();
+                    Configuration = builder.Build();
+                })
+                .UseCustomLogging()
+                .ConfigureServices(RegisterServices);
+
+            var coconaHostBuilder = new CoconaAppHostBuilder(hostBuilder);
+
+            await coconaHostBuilder.RunAsync<Program>(args);
         }
 
-        private static async Task<(IDataView training, IDataView test)> LoadDataAsync(MLContext mlContext)
+        [PrimaryCommand]
+        [Command("Train", Description = "Trains new model and saves it to database.")]
+        public async Task TrainModel([FromServices] TrainModelAndSaveItUseCase consoleUseCase)
         {
-            var api = RestService.For<IDiscordClashApi>("https://localhost:5001");
-            var choices = await api.GetAllChoices();
-            var eventRatings = Map(choices);
-            var data = mlContext.Data.LoadFromEnumerable(eventRatings);
-
-            //eventRatings.ForAll(Console.WriteLine); // todo: logger count
-
-            var trainTestData = mlContext.Data.TrainTestSplit(data, 0.2);
-            var trainingDataView = trainTestData.TrainSet;
-            var testDataView = trainTestData.TestSet;
-
-            return (trainingDataView, testDataView);
+            await consoleUseCase.Execute();
         }
 
-        private static ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)
+        private static void RegisterServices(HostBuilderContext context, IServiceCollection services)
         {
-            IEstimator<ITransformer> estimator = mlContext.Transforms.Conversion.MapValueToKey("userIdEncoded", "UserId")
-                .Append(mlContext.Transforms.Conversion.MapValueToKey("eventIdEncoded", "EventId"));
+            services.AddTransient<TrainModelAndSaveItUseCase>();
 
-            var options = new MatrixFactorizationTrainer.Options
-            {
-                MatrixColumnIndexColumnName = "userIdEncoded",
-                MatrixRowIndexColumnName = "eventIdEncoded",
-                LabelColumnName = "Label",
-                NumberOfIterations = 20,
-                ApproximationRank = 100
-            };
-
-            var trainerEstimator = estimator.Append(mlContext.Recommendation().Trainers.MatrixFactorization(options));
-            Console.WriteLine("=============== Training the model ===============");
-            ITransformer model = trainerEstimator.Fit(trainingDataView);
-
-            return model;
-        }
-
-        private static IEnumerable<EventRating> Map(IEnumerable<ChoiceDto> src) //todo: move to profile
-        {
-            return src.Select(c => new EventRating
-            {
-                EventId = c.EventId.GetHashCode(),
-                UserId = c.UserId.GetHashCode(),
-                Label = c.Label
-            });
+            services.AddRefitClient<IDiscordClashApi>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(Configuration["discordClashApi:url"]);
+                    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                })
+                .AddPolicyHandler(HttpClientInfrastructure.GetNotFoundRetryPolicy())
+                .AddPolicyHandler(HttpClientInfrastructure.GetCircuitBreakerPolicy());
         }
 
         private static void DisplayBanner()

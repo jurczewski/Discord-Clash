@@ -1,4 +1,4 @@
-﻿namespace DiscordClash.Recommender.Model
+﻿namespace DiscordClash.Application.UseCases.Recommender.Model
 {
     public record EventRatingPrediction
     {
