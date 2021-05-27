@@ -1,4 +1,6 @@
-﻿using DiscordClash.Application.Endpoints;
+﻿using Cocona;
+using Cocona.Hosting;
+using DiscordClash.Application.Endpoints;
 using DiscordClash.Application.UseCases.Recommender;
 using DiscordClash.Infrastructure;
 using Figgle;
@@ -21,7 +23,7 @@ namespace DiscordClash.Recommender
         {
             DisplayBanner();
 
-            var host = Host.CreateDefaultBuilder()
+            var hostBuilder = Host.CreateDefaultBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
                     builder.AddJsonFile("appsettings.json", true, true)
@@ -29,24 +31,17 @@ namespace DiscordClash.Recommender
                     Configuration = builder.Build();
                 })
                 .UseCustomLogging()
-                .ConfigureServices(RegisterServices)
-                .Build();
+                .ConfigureServices(RegisterServices);
 
-            await ParseArgs(host, args[0]);
+            var coconaHostBuilder = new CoconaAppHostBuilder(hostBuilder);
+            await coconaHostBuilder.RunAsync<Program>(args);
         }
 
-        private static async Task ParseArgs(IHost host, string command)
+        [PrimaryCommand]
+        [Command("train", Description = "Trains model and saves it.")]
+        public async Task TrainModelAndSaveIt([FromService] TrainModelAndSaveItUseCase consoleUseCase)
         {
-            switch (command)
-            {
-                case "train":
-                    var svc = ActivatorUtilities.CreateInstance<TrainModelAndSaveItUseCase>(host.Services);
-                    await svc.Execute();
-                    break;
-                default:
-                    Console.WriteLine("Invalid command");
-                    break;
-            }
+            await consoleUseCase.Execute();
         }
 
         private static void RegisterServices(HostBuilderContext context, IServiceCollection services)
