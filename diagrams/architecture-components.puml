@@ -5,30 +5,38 @@ title **Discord Clash - Diagram komponentów**
 
 frame "Aplikacja serwerowa" {
     [API]
+}
+
+frame "Aplikacja konsolowa" {
     [System Rekomendacji] as RS  
 }
 
+frame "MongoDB" {
+    database "Baza użytkowników" as DB2
+    database "Baza wydarzeń" as DB3
+}
+
 frame "MSSQL" {
-    database "Baza użytkowników" as DB1
-    database "Baza wydarzeń" as DB2
+    database "Model rekomendacji" as DB1
 }
 
 frame RabbitMQ as Rabbit {
     queue "Kolejka" as Q1
 }
 
-frame "Aplikacja konsolowa" {
+frame "Aplikacja konsolowa\n - usługa" {
     [Discord BOT] as BOT
 }
 
 () "Serwer Discord" as Channel
 
-API -right-> Q1 : "  publikuje  "
+API -right-> Q1 : "\tpublikuje\t"
 Q1 -right-> BOT : ""
-Q1 <.right. BOT : "  subskrybuje  "
+Q1 <.right. BOT : "\tsubskrybuje\t"
 BOT -right-> Channel : "\t"
-API -down-> DB1
-API -down-> DB2
-API <.left.> RS
+RS -up-> DB1
+API --> DB1
+API --> DB2
+API --> DB3
 
 @enduml
