@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DiscordClash.Recommender": {
+      "commandName": "Project",
+      "commandLineArgs": "rec"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 ﻿using Cocona;
 using Cocona.Hosting;
 using DiscordClash.Application.Endpoints;
+using DiscordClash.Application.Queries;
 using DiscordClash.Application.UseCases.Recommender;
 using DiscordClash.Infrastructure;
 using Figgle;
@@ -44,9 +45,17 @@ namespace DiscordClash.Recommender
             await consoleUseCase.Execute();
         }
 
+        [Command("rec", Description = "Loads model and use it.")]
+        public void LoadAndRecommend([FromService] LoadAndRecommendUseCase consoleUseCase)
+        {
+            var choice = new ChoiceDto { UserId = Guid.Parse("eacf1405-e4cc-41aa-b65e-8752dfaad5de"), EventId = Guid.Parse("43addb42-4bdc-48fb-a04d-7857ffcc8f2a") };
+            consoleUseCase.Execute(choice);
+        }
+
         private static void RegisterServices(HostBuilderContext context, IServiceCollection services)
         {
             services.AddTransient<TrainModelAndSaveItUseCase>();
+            services.AddTransient<LoadAndRecommendUseCase>();
 
             services.AddRefitClient<IDiscordClashApi>()
                 .ConfigureHttpClient(c =>

@@ -9,12 +9,19 @@ namespace DiscordClash.Application.Mappings
     {
         public static IEnumerable<EventRating> Map(this IEnumerable<ChoiceDto> src)
         {
-            return src.Select(c => new EventRating
+            return src.Select(c => c.Map());
+        }
+
+        public static EventRating Map(this ChoiceDto src)
+        {
+            return new()
             {
-                EventId = c.EventId.GetHashCode(),
-                UserId = c.UserId.GetHashCode(),
-                Label = c.Label
-            });
+                EventId = src.EventId.GetHashCode(),
+                UserId = src.UserId.GetHashCode(),
+                Label = src.Label,
+                EventIdGuid = src.EventId,
+                UserIdGuid = src.UserId
+            };
         }
     }
 }
