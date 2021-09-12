@@ -1,0 +1,42 @@
+@startuml
+skinparam defaultFontName Muli
+
+title **Discord Clash - Components Diagram**
+
+frame "Server application" {
+    [API]
+}
+
+frame "Console application" {
+    [Recommendation system] as RS  
+}
+
+frame "MongoDB" {
+    database "Users storage" as DB2
+    database "Events storage" as DB3
+}
+
+frame "MSSQL" {
+    database "Recommendation model" as DB1
+}
+
+frame RabbitMQ as Rabbit {
+    queue "Queue" as Q1
+}
+
+frame "Console application\n - service" {
+    [Discord BOT] as BOT
+}
+
+() "Discord Server" as Channel
+
+API -right-> Q1 : "\tpublish\t"
+Q1 -right-> BOT : ""
+Q1 <.right. BOT : "\tsubscribe\t"
+BOT -right-> Channel : "\t"
+RS -up-> DB1
+API --> DB1
+API --> DB2
+API --> DB3
+
+@enduml
