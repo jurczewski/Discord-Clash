@@ -18,7 +18,7 @@ namespace DiscordClash.API.Extensions
                     new OpenApiInfo
                     {
                         Title = "DiscordClash.API",
-                        Description = "**Discord Clash** is a distributed application written in .NET. An event management system, with Discord bot to control the app and a recommendation system to help users know about new events for them.",
+                        Description = "**Discord Clash** is a distributed application written in .NET. An event management system, with Discord bot to control the application and a recommendation system to help users to know about new events for them.",
                         Contact = new OpenApiContact
                         {
                             Name = "Bartosz Jurczewski",

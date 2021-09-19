@@ -1,6 +1,6 @@
 # Discord Clash [![Build](https://github.com/jurczewski/Discord-Clash/actions/workflows/build.yml/badge.svg)](https://github.com/jurczewski/Discord-Clash/actions/workflows/build.yml)
 
-**Discord Clash** is a distributed application written in .NET. An event management system, with Discord bot to control the app and a recommendation system to help users know about new events for them.
+**Discord Clash** is a distributed application written in .NET. An event management system, with Discord bot to control the application and a recommendation system to help users to know about new events for them.
 
 ## Authors
 
@@ -8,10 +8,10 @@
 
 ## Tech Stack
 
-- .NET 5.0 with in C#,
+- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) with in C#,
 - [RabbitMQ](https://www.rabbitmq.com/) with [EasyNetQ](https://github.com/EasyNetQ/EasyNetQ) library,
 - MongoDB - for storing users and events,
-- [Discord.Net](https://github.com/discord-net/Discord.Net) - .NET API,Wrapper for the Discord client,
+- [Discord.Net](https://github.com/discord-net/Discord.Net) - .NET API, wrapper for the Discord client,
 - [Cocona](https://github.com/mayuki/Cocona) - micro-framework for .NET Core console application.
 
 Other used libs: [Figgle](https://github.com/drewnoakes/figgle), [Refit](https://github.com/reactiveui/refit), [Serilog](https://github.com/serilog/serilog), [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) (Swagger).
